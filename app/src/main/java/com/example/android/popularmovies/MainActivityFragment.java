@@ -1,10 +1,13 @@
 package com.example.android.popularmovies;
 
 import android.content.SharedPreferences;
+import android.graphics.Movie;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.text.format.Time;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -17,6 +20,10 @@ import android.widget.GridView;
 import android.widget.ImageView;
 
 import com.squareup.picasso.Picasso;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -118,9 +125,63 @@ public class MainActivityFragment extends Fragment {
             // Will contain the raw JSON response as a string.
             String movieJsonStr = null;
 
+            // Sort by popularity in descending order
+            //String sort_by = "popularity.desc";
+            // Sort by popularity in ascending order
+            //String sort_by = "popularity.asc";
+            // Sort by vote count in descending order
+            //String sort_by = "vote_count.desc";
+            // Sort by vote count in ascending order
+            //String sort_by = "vote_count.asc";
+
+
+
             try{
+                /*
+                String format = "json";
+                String units = "metric";
+                int numDays = 7;
+                 */
+                /*
+                final String QUERY_PARAM = "q";
+                final String FORMAT_PARAM = "mode";
+                final String UNITS_PARAM = "units";
+                final String DAYS_PARAM = "cnt";
+
+                Uri.Builder builder = new Uri.Builder();
+                builder.scheme("http")
+                        .authority("api.openweathermap.org")
+                        .appendPath("data")
+                        .appendPath("2.5")
+                        .appendPath("forecast")
+                        .appendPath("daily")
+                        .appendQueryParameter(QUERY_PARAM, params[0])
+                        .appendQueryParameter(FORMAT_PARAM, format)
+                        .appendQueryParameter(UNITS_PARAM, units)
+                        .appendQueryParameter(DAYS_PARAM, Integer.toString(numDays));
+                URL url = new URL(builder.build().toString());
+                Log.v(LOG_TAG, url.toString());
+
+                //URL url = new URL("http://api.openweathermap.org/data/2.5/forecast/daily?q=94043&mode=json&units=metric&cnt=7");
+                 */
+
+                final String SORT_BY_PARAM = "sort_by";
+                final String API_KEY_PARAM = "api_key";
+                final String API_KEY = "";
+
                 // Construct the URL for the query
-                URL url = new URL("http://api.themoviedb.org/3/discover/movie?sort_by=popularity.desc&api_key=[Developer_Key]");
+                Uri.Builder builder = new Uri.Builder();
+                builder.scheme("http")
+                        .authority("api.themoviedb.org")
+                        .appendPath("3")
+                        .appendPath("discover")
+                        .appendPath("movie")
+                        .appendQueryParameter(SORT_BY_PARAM, "popularity.desc")
+                        .appendQueryParameter(API_KEY_PARAM, API_KEY);
+                URL url = new URL(builder.build().toString());
+                Log.v(LOG_TAG, url.toString());
+
+                //URL url = new URL("http://api.themoviedb.org/3/discover/movie?sort_by=popularity.desc&api_key=1f81622504d93fd944c771a94fefecfb");
 
                 // Create the request and open the connection
                 urlConnection = (HttpURLConnection) url.openConnection();
@@ -169,7 +230,139 @@ public class MainActivityFragment extends Fragment {
                     }
                 }
             }
+            try {
+                //String[] result = getWeatherDataFromJson(forecastJsonStr, numDays);
+                //for (String item: result){
+                //    Log.v(LOG_TAG, item);
+                //}
+                //return result;
+                getMovieDataFromJson(movieJsonStr);
+            }
+            catch (JSONException e){
+                Log.e(LOG_TAG, "Error getting weather data from json", e);
+                e.printStackTrace();
+            }
             return null;
+        }
+
+        /**
+         * Take the String representing the complete forecast in JSON Format and
+         * pull out the data we need to construct the Strings needed for the wireframes.
+         *
+         * Fortunately parsing is easy:  constructor takes the JSON string and converts it
+         * into an Object hierarchy for us.
+         */
+        private void getMovieDataFromJson(String movieJsonStr)
+                throws JSONException {
+
+            // These are the names of the JSON objects that need to be extracted.
+            final String OWM_RESULT = "results";
+            final String OWM_ADULT = "adult";
+            final String OWM_BACKDROP_PATH = "backdrop_path";
+            final String OWM_GENRE_IDS = "genre_ids";
+            final String OWM_ID = "id";
+            final String OWM_ORG_LANG = "original_language";
+            final String OWM_ORG_TITLE = "original_title";
+            final String OWM_OVERVIEW = "overview";
+            final String OWM_REL_DATE = "release_date";
+            final String OWM_POSTER_PATH = "poster_path";
+            final String OWM_POPULARITY = "popularity";
+            final String OWM_TITLE = "title";
+            final String OWM_VIDEO = "video";
+            final String OWM_VOTE_AVG = "vote_average";
+            final String OWM_VOTE_COUNT = "vote_count";
+
+            JSONObject movieJson = new JSONObject(movieJsonStr);
+            JSONArray movieArray = movieJson.getJSONArray(OWM_RESULT);
+            JSONObject itemMovie = movieArray.getJSONObject(0);
+
+            ArrayList<MovieData> movieDataArray = new ArrayList<MovieData>();
+
+            MovieData movieData = new MovieData();
+
+            movieData.setAdult(itemMovie.getBoolean(OWM_ADULT));
+            movieData.setBackdropPath(itemMovie.getString(OWM_BACKDROP_PATH));
+            // Genre Ids
+            movieData.setId(itemMovie.getLong(OWM_ID));
+            movieData.setOriginalLanguage(itemMovie.getString(OWM_ORG_LANG));
+            movieData.setOriginalTitle(itemMovie.getString(OWM_ORG_TITLE));
+            movieData.setOverview(itemMovie.getString(OWM_OVERVIEW));
+            movieData.setReleaseDate(itemMovie.getString(OWM_REL_DATE));
+            movieData.setPosterPath(itemMovie.getString(OWM_POSTER_PATH));
+            movieData.setPopularity(itemMovie.getDouble(OWM_POPULARITY));
+            movieData.setTitle(itemMovie.getString(OWM_TITLE));
+            movieData.setVideo(itemMovie.getBoolean(OWM_VIDEO));
+            movieData.setVoteAvg(itemMovie.getString(OWM_VOTE_AVG));
+            movieData.setVoteCount(itemMovie.getString(OWM_VOTE_COUNT));
+
+
+            /*
+            Boolean adult = itemMovie.getBoolean(OWM_ADULT);
+            String backdrop_path = itemMovie.getString(OWM_BACKDROP_PATH);
+            // Genre Ids
+            long id = itemMovie.getLong(OWM_ID);
+            String original_language = itemMovie.getString(OWM_ORG_LANG);
+            String original_title = itemMovie.getString(OWM_ORG_TITLE);
+            String overview = itemMovie.getString(OWM_OVERVIEW);
+            String release_date = itemMovie.getString(OWM_REL_DATE);
+            String poster_path = itemMovie.getString(OWM_POSTER_PATH);
+            double popularity = itemMovie.getDouble(OWM_POPULARITY);
+            String title = itemMovie.getString(OWM_TITLE);
+            String video = itemMovie.getString(OWM_VIDEO);
+            String vote_average = itemMovie.getString(OWM_VOTE_AVG);
+            String vote_count = itemMovie.getString(OWM_VOTE_COUNT);
+
+
+            Log.v(LOG_TAG, Boolean.toString(adult));
+            Log.v(LOG_TAG, backdrop_path);
+            Log.v(LOG_TAG, Long.toString(id));
+            Log.v(LOG_TAG, original_language);
+            Log.v(LOG_TAG, original_title);
+            Log.v(LOG_TAG, overview);
+            Log.v(LOG_TAG, release_date);
+            Log.v(LOG_TAG, poster_path);
+            Log.v(LOG_TAG, Double.toString(popularity));
+            Log.v(LOG_TAG, title);
+            Log.v(LOG_TAG, video);
+            Log.v(LOG_TAG, vote_average);
+            Log.v(LOG_TAG, vote_count);
+            */
+
+            Log.v(LOG_TAG, "Adult " + Boolean.toString(movieData.getAdult()));
+            Log.v(LOG_TAG, "Backdrop path " + movieData.getBackdropPath());
+            Log.v(LOG_TAG, "Id " + Long.toString(movieData.getId()));
+            Log.v(LOG_TAG, "Org lang " + movieData.getOriginalLanguage());
+            Log.v(LOG_TAG, "Org title " + movieData.getOriginalTitle());
+            Log.v(LOG_TAG, "Overview " + movieData.getOverview());
+            Log.v(LOG_TAG, "Rel Data " + movieData.getReleaseDate());
+            Log.v(LOG_TAG, "Poster Path " + movieData.getPosterPath());
+            Log.v(LOG_TAG, "Popularity " + Double.toString(movieData.getPopularity()));
+            Log.v(LOG_TAG, "Title " + movieData.getTitle());
+            Log.v(LOG_TAG, "Video " + Boolean.toString(movieData.getVideo()));
+            Log.v(LOG_TAG, "Vote Avg " + movieData.getVoteAvg());
+            Log.v(LOG_TAG, "Vote Count " + movieData.getVoteCount());
+
+
+            movieDataArray.add(0, movieData);
+            //movieDataArray.add(movieData);
+
+            Log.v(LOG_TAG, "Adult " + Boolean.toString(movieDataArray.get(0).getAdult()));
+            Log.v(LOG_TAG, "Backdrop path " + movieDataArray.get(0).getBackdropPath());
+            Log.v(LOG_TAG, "Id " + Long.toString(movieDataArray.get(0).getId()));
+            Log.v(LOG_TAG, "Org lang " + movieDataArray.get(0).getOriginalLanguage());
+            Log.v(LOG_TAG, "Org title " + movieDataArray.get(0).getOriginalTitle());
+            Log.v(LOG_TAG, "Overview " + movieDataArray.get(0).getOverview());
+            Log.v(LOG_TAG, "Rel Data " + movieDataArray.get(0).getReleaseDate());
+            Log.v(LOG_TAG, "Poster Path " + movieDataArray.get(0).getPosterPath());
+            Log.v(LOG_TAG, "Popularity " + Double.toString(movieDataArray.get(0).getPopularity()));
+            Log.v(LOG_TAG, "Title " + movieDataArray.get(0).getTitle());
+            Log.v(LOG_TAG, "Video " + Boolean.toString(movieDataArray.get(0).getVideo()));
+            Log.v(LOG_TAG, "Vote Avg " + movieDataArray.get(0).getVoteAvg());
+            Log.v(LOG_TAG, "Vote Count " + movieDataArray.get(0).getVoteCount());
+
+
+
+
         }
 
     }
