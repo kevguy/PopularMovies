@@ -1,5 +1,6 @@
 package com.example.android.popularmovies;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Movie;
 import android.net.Uri;
@@ -98,7 +99,23 @@ public class MainActivityFragment extends Fragment {
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
                 //String forecast = mImageMovieAdapter.getItem(position);
                 String forecast = mMovieDataArray.get(position).getOriginalTitle();
+
+                ArrayList<String> movieDetailArray = new ArrayList<String>();
+                movieDetailArray.add(0, Boolean.toString(mMovieDataArray.get(position).getAdult()));
+                movieDetailArray.add(1, Long.toString(mMovieDataArray.get(position).getId()));
+                movieDetailArray.add(2, mMovieDataArray.get(position).getOriginalLanguage());
+                movieDetailArray.add(3, mMovieDataArray.get(position).getOriginalTitle());
+                movieDetailArray.add(4, mMovieDataArray.get(position).getOverview());
+                movieDetailArray.add(5, mMovieDataArray.get(position).getReleaseDate());
+                movieDetailArray.add(6, Double.toString(mMovieDataArray.get(position).getPopularity()));
+                movieDetailArray.add(7, mMovieDataArray.get(position).getTitle());
+                movieDetailArray.add(8, Boolean.toString(mMovieDataArray.get(position).getVideo()));
+                movieDetailArray.add(9, Double.toString(mMovieDataArray.get(position).getVoteAvg()));
+                movieDetailArray.add(10, Integer.toString(mMovieDataArray.get(position).getVoteCount()));
                 Toast.makeText(getActivity(), forecast, Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(getActivity(), DetailActivity.class)
+                        .putStringArrayListExtra(Intent.EXTRA_TEXT, movieDetailArray);
+                startActivity(intent);
             }
         });
 
@@ -291,8 +308,8 @@ public class MainActivityFragment extends Fragment {
                 movieData.setPopularity(itemMovie.getDouble(OWM_POPULARITY));
                 movieData.setTitle(itemMovie.getString(OWM_TITLE));
                 movieData.setVideo(itemMovie.getBoolean(OWM_VIDEO));
-                movieData.setVoteAvg(itemMovie.getString(OWM_VOTE_AVG));
-                movieData.setVoteCount(itemMovie.getString(OWM_VOTE_COUNT));
+                movieData.setVoteAvg(itemMovie.getDouble(OWM_VOTE_AVG));
+                movieData.setVoteCount(itemMovie.getInt(OWM_VOTE_COUNT));
 
                 movieDataArray.add(i, movieData);
                 movieDataArray.add(movieData);
@@ -311,8 +328,8 @@ public class MainActivityFragment extends Fragment {
                 Log.v(LOG_TAG, "Popularity " + Double.toString(movieDataArray.get(i).getPopularity()));
                 Log.v(LOG_TAG, "Title " + movieDataArray.get(i).getTitle());
                 Log.v(LOG_TAG, "Video " + Boolean.toString(movieDataArray.get(i).getVideo()));
-                Log.v(LOG_TAG, "Vote Avg " + movieDataArray.get(i).getVoteAvg());
-                Log.v(LOG_TAG, "Vote Count " + movieDataArray.get(i).getVoteCount());
+                Log.v(LOG_TAG, "Vote Avg " + Double.toString(movieDataArray.get(i).getVoteAvg()));
+                Log.v(LOG_TAG, "Vote Count " + Integer.toString(movieDataArray.get(i).getVoteCount()));
             }
 
 

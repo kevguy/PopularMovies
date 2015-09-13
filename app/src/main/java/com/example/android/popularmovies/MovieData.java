@@ -18,8 +18,8 @@ public class MovieData {
     private double popularity;
     private String title;
     private boolean video;
-    private String vote_average;
-    private String vote_count;
+    private double vote_average;
+    private int vote_count;
 
     public MovieData(){
         genre_ids = new ArrayList<Integer>();
@@ -129,19 +129,19 @@ public class MovieData {
         video = data;
     }
 
-    public String getVoteAvg(){
+    public double getVoteAvg(){
         return vote_average;
     }
 
-    public void setVoteAvg(String data){
+    public void setVoteAvg(double data){
         vote_average = data;
     }
 
-    public String getVoteCount(){
+    public int getVoteCount(){
         return vote_count;
     }
 
-    public void setVoteCount(String data){
+    public void setVoteCount(int data){
         vote_count = data;
     }
 }
