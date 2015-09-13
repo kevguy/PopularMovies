@@ -39,17 +39,7 @@ import java.util.Arrays;
  */
 public class MainActivityFragment extends Fragment {
 
-    ArrayAdapter<String> mMovieAdapter;
     NetworkImageAdapter mImageMovieAdapter;
-
-    String[] movieArray = {
-            "http://www.billboard.com/files/styles/promo_650/public/media/linkin-park-billboard-650.jpg",
-            "http://www.billboard.com/files/styles/promo_650/public/media/linkin-park-billboard-650.jpg",
-            "http://www.billboard.com/files/styles/promo_650/public/media/linkin-park-billboard-650.jpg",
-            "http://www.billboard.com/files/styles/promo_650/public/media/linkin-park-billboard-650.jpg",
-            "http://www.billboard.com/files/styles/promo_650/public/media/linkin-park-billboard-650.jpg",
-            "http://www.billboard.com/files/styles/promo_650/public/media/linkin-park-billboard-650.jpg",
-    };
 
     public MainActivityFragment() {
     }
@@ -88,29 +78,13 @@ public class MainActivityFragment extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
 
-        FetchMovieTask movieTask = new FetchMovieTask();
-        //SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        //String location = prefs.getString(getString(R.string.pref_location_key),
-        //getString(R.string.pref_location_default));
-
-        //movieTask.execute(location);
-        movieTask.execute();
-
         ArrayList<String> movieBackdropPath = new ArrayList<String>();
 
-        mMovieAdapter = new ArrayAdapter<String>(getActivity(),
-                R.layout.image_item_movie,
-                R.id.image_item_movie_imageview,
-                movieBackdropPath);
-
-        //mImageMovieAdapter = new ImageAdapter(getActivity(), movieArray);
         mImageMovieAdapter = new NetworkImageAdapter(getActivity(),
                 R.id.image_item_movie_imageview,
                 movieBackdropPath);
 
-
         GridView gridView = (GridView) rootView.findViewById(R.id.grid_view_movie);
-        //gridView.setAdapter(mMovieAdapter);
         gridView.setAdapter(mImageMovieAdapter);
 
         return rootView;
@@ -154,34 +128,6 @@ public class MainActivityFragment extends Fragment {
             //String sort_by = "vote_count.asc";
 
             try{
-                /*
-                String format = "json";
-                String units = "metric";
-                int numDays = 7;
-                 */
-                /*
-                final String QUERY_PARAM = "q";
-                final String FORMAT_PARAM = "mode";
-                final String UNITS_PARAM = "units";
-                final String DAYS_PARAM = "cnt";
-
-                Uri.Builder builder = new Uri.Builder();
-                builder.scheme("http")
-                        .authority("api.openweathermap.org")
-                        .appendPath("data")
-                        .appendPath("2.5")
-                        .appendPath("forecast")
-                        .appendPath("daily")
-                        .appendQueryParameter(QUERY_PARAM, params[0])
-                        .appendQueryParameter(FORMAT_PARAM, format)
-                        .appendQueryParameter(UNITS_PARAM, units)
-                        .appendQueryParameter(DAYS_PARAM, Integer.toString(numDays));
-                URL url = new URL(builder.build().toString());
-                Log.v(LOG_TAG, url.toString());
-
-                //URL url = new URL("http://api.openweathermap.org/data/2.5/forecast/daily?q=94043&mode=json&units=metric&cnt=7");
-                 */
-
                 final String SORT_BY_PARAM = "sort_by";
                 final String API_KEY_PARAM = "api_key";
                 final String API_KEY = "";
@@ -205,7 +151,7 @@ public class MainActivityFragment extends Fragment {
                 urlConnection.setRequestMethod("GET");
                 urlConnection.connect();
 
-                // Read the input strem into a String
+                // Read the input stream into a String
                 InputStream inputStream = urlConnection.getInputStream();
                 StringBuffer buffer = new StringBuffer();
                 if (inputStream == null){
@@ -248,11 +194,6 @@ public class MainActivityFragment extends Fragment {
                 }
             }
             try {
-                //String[] result = getWeatherDataFromJson(forecastJsonStr, numDays);
-                //for (String item: result){
-                //    Log.v(LOG_TAG, item);
-                //}
-                //return result;
                 ArrayList<MovieData> movieDataArray = new ArrayList<MovieData>();
                 movieDataArray = getMovieDataFromJson(movieJsonStr);
                 return movieDataArray;
@@ -269,13 +210,8 @@ public class MainActivityFragment extends Fragment {
             if (result != null) {
                 //mMovieAdapter.clear();
                 mImageMovieAdapter.clear();
-
                 for (MovieData movieDataItem : result){
-                    //mMovieAdapter.add("http://image.tmdb.org/t/p/w185/" + movieDataItem.getBackdropPath());
-                    Log.v(LOG_TAG, "Fuck" + movieDataItem.getPosterPath());
-                    //mMovieAdapter.add("" + movieDataItem.getPosterPath());
                     mImageMovieAdapter.add("http://image.tmdb.org/t/p/w185/" + movieDataItem.getPosterPath());
-                    movieArray[0] = "http://image.tmdb.org/t/p/w185/" + movieDataItem.getPosterPath();
                 }
 
 
@@ -315,16 +251,14 @@ public class MainActivityFragment extends Fragment {
 
             ArrayList<MovieData> movieDataArray = new ArrayList<MovieData>();
 
-
-
             for (int i = 0; i < movieArray.length(); ++i) {
                 JSONObject itemMovie = movieArray.getJSONObject(i);
 
 
                 MovieData movieData = new MovieData();
 
-                //movieData.setAdult(itemMovie.getBoolean(OWM_ADULT));
-                //movieData.setBackdropPath(itemMovie.getString(OWM_BACKDROP_PATH));
+                movieData.setAdult(itemMovie.getBoolean(OWM_ADULT));
+                movieData.setBackdropPath(itemMovie.getString(OWM_BACKDROP_PATH));
                 JSONArray tmp = itemMovie.getJSONArray(OWM_GENRE_IDS);
                 ArrayList<Integer> list = new ArrayList<Integer>();
                 // Genre Ids
@@ -334,39 +268,38 @@ public class MainActivityFragment extends Fragment {
                         list.add(Integer.parseInt(tmp.get(j).toString()));
                     }
                 }
-                //movieData.setGenreIds(list);
-                //movieData.setId(itemMovie.getLong(OWM_ID));
-                //movieData.setOriginalLanguage(itemMovie.getString(OWM_ORG_LANG));
+                movieData.setGenreIds(list);
+                movieData.setId(itemMovie.getLong(OWM_ID));
+                movieData.setOriginalLanguage(itemMovie.getString(OWM_ORG_LANG));
                 movieData.setOriginalTitle(itemMovie.getString(OWM_ORG_TITLE));
-                //movieData.setOverview(itemMovie.getString(OWM_OVERVIEW));
-                //movieData.setReleaseDate(itemMovie.getString(OWM_REL_DATE));
+                movieData.setOverview(itemMovie.getString(OWM_OVERVIEW));
+                movieData.setReleaseDate(itemMovie.getString(OWM_REL_DATE));
                 movieData.setPosterPath(itemMovie.getString(OWM_POSTER_PATH));
-                //movieData.setPopularity(itemMovie.getDouble(OWM_POPULARITY));
-                //movieData.setTitle(itemMovie.getString(OWM_TITLE));
-                //movieData.setVideo(itemMovie.getBoolean(OWM_VIDEO));
-                //movieData.setVoteAvg(itemMovie.getString(OWM_VOTE_AVG));
-                //movieData.setVoteCount(itemMovie.getString(OWM_VOTE_COUNT));
+                movieData.setPopularity(itemMovie.getDouble(OWM_POPULARITY));
+                movieData.setTitle(itemMovie.getString(OWM_TITLE));
+                movieData.setVideo(itemMovie.getBoolean(OWM_VIDEO));
+                movieData.setVoteAvg(itemMovie.getString(OWM_VOTE_AVG));
+                movieData.setVoteCount(itemMovie.getString(OWM_VOTE_COUNT));
 
                 movieDataArray.add(i, movieData);
-                //movieDataArray.add(movieData);
+                movieDataArray.add(movieData);
 
-                //Log.v(LOG_TAG, "Adult " + Boolean.toString(movieDataArray.get(i).getAdult()));
-                //Log.v(LOG_TAG, "Backdrop path " + movieDataArray.get(i).getBackdropPath());
+                Log.v(LOG_TAG, "Adult " + Boolean.toString(movieDataArray.get(i).getAdult()));
+                Log.v(LOG_TAG, "Backdrop path " + movieDataArray.get(i).getBackdropPath());
                 for (int j = 0; j < movieDataArray.get(i).getGenreIds().size(); ++j) {
                     Log.v(LOG_TAG, "Genre ID " + movieDataArray.get(i).getGenreIds().get(j));
                 }
-                //Log.v(LOG_TAG, "Id " + Long.toString(movieDataArray.get(i).getId()));
-                //Log.v(LOG_TAG, "Org lang " + movieDataArray.get(i).getOriginalLanguage());
+                Log.v(LOG_TAG, "Id " + Long.toString(movieDataArray.get(i).getId()));
+                Log.v(LOG_TAG, "Org lang " + movieDataArray.get(i).getOriginalLanguage());
                 Log.v(LOG_TAG, "Org title " + movieDataArray.get(i).getOriginalTitle());
-                //Log.v(LOG_TAG, "Overview " + movieDataArray.get(i).getOverview());
-                //Log.v(LOG_TAG, "Rel Data " + movieDataArray.get(i).getReleaseDate());
+                Log.v(LOG_TAG, "Overview " + movieDataArray.get(i).getOverview());
+                Log.v(LOG_TAG, "Rel Data " + movieDataArray.get(i).getReleaseDate());
                 Log.v(LOG_TAG, "Poster Path " + movieDataArray.get(i).getPosterPath());
-                //Log.v(LOG_TAG, "Popularity " + Double.toString(movieDataArray.get(i).getPopularity()));
-                //Log.v(LOG_TAG, "Title " + movieDataArray.get(i).getTitle());
-                //Log.v(LOG_TAG, "Video " + Boolean.toString(movieDataArray.get(i).getVideo()));
-                //Log.v(LOG_TAG, "Vote Avg " + movieDataArray.get(i).getVoteAvg());
-                //Log.v(LOG_TAG, "Vote Count " + movieDataArray.get(i).getVoteCount());
-
+                Log.v(LOG_TAG, "Popularity " + Double.toString(movieDataArray.get(i).getPopularity()));
+                Log.v(LOG_TAG, "Title " + movieDataArray.get(i).getTitle());
+                Log.v(LOG_TAG, "Video " + Boolean.toString(movieDataArray.get(i).getVideo()));
+                Log.v(LOG_TAG, "Vote Avg " + movieDataArray.get(i).getVoteAvg());
+                Log.v(LOG_TAG, "Vote Count " + movieDataArray.get(i).getVoteCount());
             }
 
 
