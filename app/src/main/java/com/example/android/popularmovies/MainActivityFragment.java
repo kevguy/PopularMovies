@@ -15,9 +15,11 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
@@ -40,6 +42,7 @@ import java.util.Arrays;
 public class MainActivityFragment extends Fragment {
 
     NetworkImageAdapter mImageMovieAdapter;
+    ArrayList<MovieData> mMovieDataArray;
 
     public MainActivityFragment() {
     }
@@ -78,14 +81,26 @@ public class MainActivityFragment extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
 
-        ArrayList<String> movieBackdropPath = new ArrayList<String>();
+        ArrayList<String> moviePosterPath = new ArrayList<String>();
 
         mImageMovieAdapter = new NetworkImageAdapter(getActivity(),
                 R.id.image_item_movie_imageview,
-                movieBackdropPath);
+                moviePosterPath);
+
+        mMovieDataArray = new ArrayList<MovieData>();
 
         GridView gridView = (GridView) rootView.findViewById(R.id.grid_view_movie);
         gridView.setAdapter(mImageMovieAdapter);
+
+        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
+                //String forecast = mImageMovieAdapter.getItem(position);
+                String forecast = mMovieDataArray.get(position).getOriginalTitle();
+                Toast.makeText(getActivity(), forecast, Toast.LENGTH_SHORT).show();
+            }
+        });
 
         return rootView;
     }
@@ -213,9 +228,7 @@ public class MainActivityFragment extends Fragment {
                 for (MovieData movieDataItem : result){
                     mImageMovieAdapter.add("http://image.tmdb.org/t/p/w185/" + movieDataItem.getPosterPath());
                 }
-
-
-
+                mMovieDataArray = result;
             }
         }
 
