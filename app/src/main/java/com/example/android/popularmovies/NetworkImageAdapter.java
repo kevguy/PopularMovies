@@ -31,18 +31,13 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Project: Popular Movies
- * Created by muhammad on 01/07/15.
- */
-
 public class NetworkImageAdapter extends ArrayAdapter<String> {
 
     private ViewHolder viewHolder;
     private Context mContext;
 
     private static class ViewHolder {
-        private TextView itemView;
+        private ImageView itemView;
     }
 
     public NetworkImageAdapter(Context context, int textViewResourceId, ArrayList<String> items) {
@@ -57,7 +52,7 @@ public class NetworkImageAdapter extends ArrayAdapter<String> {
                     .inflate(R.layout.image_item_movie, parent, false);
 
             viewHolder = new ViewHolder();
-            viewHolder.itemView = (TextView) convertView.findViewById(R.id.image_item_movie_imageview);
+            viewHolder.itemView = (ImageView) convertView.findViewById(R.id.image_item_movie_imageview);
 
             convertView.setTag(viewHolder);
         } else {
@@ -66,12 +61,9 @@ public class NetworkImageAdapter extends ArrayAdapter<String> {
 
         String item = getItem(position);
         if (item!= null) {
-            // My layout has only one TextView
-            // do whatever you want with your string and long
-            viewHolder.itemView.setText(item);
-            //Picasso.with(mContext)
-             //       .load(item)
-              //      .into((ImageView) convertView);
+            Picasso.with(mContext)
+                    .load(item)
+                    .into((ImageView) convertView);
         }
 
         return convertView;
