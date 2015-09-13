@@ -1,25 +1,28 @@
 package com.example.android.popularmovies;
 
+import java.util.ArrayList;
+
 /**
  * Created by kev on 9/13/15.
  */
 public class MovieData {
-    boolean adult;
-    String backdrop_path;
-    int genre_ids[];
-    long id;
-    String original_language;
-    String original_title;
-    String overview;
-    String release_date;
-    String poster_path;
-    double popularity;
-    String title;
-    boolean video;
-    String vote_average;
-    String vote_count;
+    private boolean adult;
+    private String backdrop_path;
+    private ArrayList<Integer> genre_ids;
+    private long id;
+    private String original_language;
+    private String original_title;
+    private String overview;
+    private String release_date;
+    private String poster_path;
+    private double popularity;
+    private String title;
+    private boolean video;
+    private String vote_average;
+    private String vote_count;
 
     public MovieData(){
+        genre_ids = new ArrayList<Integer>();
     }
 
     public boolean getAdult(){
@@ -38,20 +41,20 @@ public class MovieData {
         backdrop_path = path;
     }
 
-    public int[] getGenreIds(){
+    public ArrayList<Integer> getGenreIds(){
         return genre_ids;
     }
 
-    public void setGenreIds(int[] input){
+    public void setGenreIds(ArrayList<Integer> input){
         genre_ids = input;
     }
 
     public int getGenreIdsItem(int position){
-        return genre_ids[position];
+        return genre_ids.get(position);
     }
 
     public void setGenreIdsItem(int position, int data){
-        genre_ids[position] = data;
+        genre_ids.set(position, data);
     }
 
     public long getId(){
