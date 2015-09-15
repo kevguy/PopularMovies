@@ -124,12 +124,12 @@ public class MainActivityFragment extends Fragment {
 
     private void updateRecommendation() {
         FetchMovieTask movieTask = new FetchMovieTask();
-        //SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        //String location = prefs.getString(getString(R.string.pref_location_key),
-                //getString(R.string.pref_location_default));
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        String sortOption = prefs.getString(getString(R.string.pref_sorts_key),
+                getString(R.string.pref_sorts_default));
 
         //movieTask.execute(location);
-        movieTask.execute();
+        movieTask.execute(sortOption);
     }
 
     @Override
@@ -138,12 +138,18 @@ public class MainActivityFragment extends Fragment {
         updateRecommendation();
     }
 
-    private class FetchMovieTask extends AsyncTask<Void, Void, ArrayList<MovieData>> {
+    private class FetchMovieTask extends AsyncTask<String, Void, ArrayList<MovieData>> {
 
         private final String LOG_TAG = FetchMovieTask.class.getSimpleName();
 
         @Override
-        protected ArrayList<MovieData> doInBackground(Void... params) {
+        protected ArrayList<MovieData> doInBackground(String... params) {
+
+            if (params.length == 0){
+                return null;
+            }
+
+
             HttpURLConnection urlConnection = null;
             BufferedReader reader = null;
 
@@ -171,7 +177,7 @@ public class MainActivityFragment extends Fragment {
                         .appendPath("3")
                         .appendPath("discover")
                         .appendPath("movie")
-                        .appendQueryParameter(SORT_BY_PARAM, "popularity.desc")
+                        .appendQueryParameter(SORT_BY_PARAM, params[0])
                         .appendQueryParameter(API_KEY_PARAM, API_KEY);
                 URL url = new URL(builder.build().toString());
                 Log.v(LOG_TAG, url.toString());
