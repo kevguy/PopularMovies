@@ -17,7 +17,11 @@ package com.example.android.popularmovies;
  */
 
 import android.content.Intent;
+import android.support.v4.view.MenuItemCompat;
+import android.util.Log;
+import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.support.v7.widget.ShareActionProvider;
 
         import android.os.Bundle;
         import android.support.v4.app.Fragment;
@@ -39,7 +43,7 @@ public class DetailActivity extends ActionBarActivity {
         setContentView(R.layout.activity_detail);
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction()
-                    .add(R.id.container, new PlaceholderFragment())
+                    .add(R.id.container, new DetailActivityFragment())
                     .commit();
         }
     }
@@ -66,34 +70,5 @@ public class DetailActivity extends ActionBarActivity {
         }
 
         return super.onOptionsItemSelected(item);
-    }
-
-    /**
-     * A placeholder fragment containing a simple view.
-     */
-    public static class PlaceholderFragment extends Fragment {
-
-        public PlaceholderFragment() {
-        }
-
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                                 Bundle savedInstanceState) {
-
-            View rootView = inflater.inflate(R.layout.fragment_detail, container, false);
-
-
-            // The detail Activity called via intent.  Inspect the intent for forecast data.
-            Intent intent = getActivity().getIntent();
-            if (intent != null && intent.hasExtra(Intent.EXTRA_TEXT)) {
-                ArrayList<String> movieDetailArray = new ArrayList<String>();
-                movieDetailArray = intent.getStringArrayListExtra(Intent.EXTRA_TEXT);
-                String overviewStr = movieDetailArray.get(4);
-                ((TextView) rootView.findViewById(R.id.detail_overview))
-                        .setText(overviewStr);
-            }
-
-            return rootView;
-        }
     }
 }
