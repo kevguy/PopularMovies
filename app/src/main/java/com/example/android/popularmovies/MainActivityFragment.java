@@ -112,6 +112,7 @@ public class MainActivityFragment extends Fragment {
                 movieDetailArray.add(8, Boolean.toString(mMovieDataArray.get(position).getVideo()));
                 movieDetailArray.add(9, Double.toString(mMovieDataArray.get(position).getVoteAvg()));
                 movieDetailArray.add(10, Integer.toString(mMovieDataArray.get(position).getVoteCount()));
+                movieDetailArray.add(11, mMovieDataArray.get(position).getPosterPath());
                 Toast.makeText(getActivity(), forecast, Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(getActivity(), DetailActivity.class)
                         .putStringArrayListExtra(Intent.EXTRA_TEXT, movieDetailArray);
