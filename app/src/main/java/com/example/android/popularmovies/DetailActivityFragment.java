@@ -12,7 +12,10 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -21,9 +24,28 @@ import java.util.ArrayList;
  */
 public class DetailActivityFragment extends Fragment {
 
+    /*
+     movieDetailArray.add(0, Boolean.toString(mMovieDataArray.get(position).getAdult()));
+    movieDetailArray.add(1, Long.toString(mMovieDataArray.get(position).getId()));
+    movieDetailArray.add(2, mMovieDataArray.get(position).getOriginalLanguage());
+    movieDetailArray.add(3, mMovieDataArray.get(position).getOriginalTitle());
+    movieDetailArray.add(4, mMovieDataArray.get(position).getOverview());
+    movieDetailArray.add(5, mMovieDataArray.get(position).getReleaseDate());
+    movieDetailArray.add(6, Double.toString(mMovieDataArray.get(position).getPopularity()));
+    movieDetailArray.add(7, mMovieDataArray.get(position).getTitle());
+    movieDetailArray.add(8, Boolean.toString(mMovieDataArray.get(position).getVideo()));
+    movieDetailArray.add(9, Double.toString(mMovieDataArray.get(position).getVoteAvg()));
+    movieDetailArray.add(10, Integer.toString(mMovieDataArray.get(position).getVoteCount()));
+    */
 
     private static final String LOG_TAG = DetailActivityFragment.class.getSimpleName();
+    private String mAdult;
+    private String mOrgLang;
+    private String mOrgTitle;
     private String mOverviewStr;
+    private String mRelDate;
+    private String mVoteAvg;
+    private String mImagePath;
     private static final String MOVIE_SHARE_HASHTAG = " #PopularMovie";
 
     public DetailActivityFragment() {
@@ -42,9 +64,29 @@ public class DetailActivityFragment extends Fragment {
         if (intent != null && intent.hasExtra(Intent.EXTRA_TEXT)) {
             ArrayList<String> movieDetailArray = new ArrayList<String>();
             movieDetailArray = intent.getStringArrayListExtra(Intent.EXTRA_TEXT);
+
             mOverviewStr = movieDetailArray.get(4);
             ((TextView) rootView.findViewById(R.id.detail_overview))
-                    .setText(mOverviewStr);
+                    .setText("Plot:" + mOverviewStr);
+            mAdult = movieDetailArray.get(0);
+            ((TextView) rootView.findViewById(R.id.detail_adult))
+                    .setText("Adult: " + mAdult);
+            mOrgLang = movieDetailArray.get(2);
+            ((TextView) rootView.findViewById(R.id.detail_org_lang))
+                    .setText("Lang: " + mOrgLang);
+            mOrgTitle = movieDetailArray.get(3);
+            ((TextView) rootView.findViewById(R.id.detail_org_title))
+                    .setText("TItle: " + mOrgTitle);
+            mRelDate = movieDetailArray.get(5);
+            ((TextView) rootView.findViewById(R.id.detail_rel_date))
+                    .setText("Release Date: " + mRelDate);
+            mVoteAvg = movieDetailArray.get(9);
+            ((TextView) rootView.findViewById(R.id.detail_user_rating))
+                    .setText("User rating: " + mVoteAvg);
+            mImagePath = movieDetailArray.get(11);
+            Picasso.with(getActivity())
+                    .load("http://image.tmdb.org/t/p/w185/" + mImagePath)
+                    .into((ImageView) rootView.findViewById(R.id.detail_image));
         }
 
         return rootView;
@@ -76,7 +118,7 @@ public class DetailActivityFragment extends Fragment {
         shareIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
         shareIntent.setType("text/plain");
         shareIntent.putExtra(Intent.EXTRA_TEXT,
-                mOverviewStr + MOVIE_SHARE_HASHTAG);
+                "I like the movie" + mOrgTitle + "!" + MOVIE_SHARE_HASHTAG);
         return shareIntent;
     }
 }
