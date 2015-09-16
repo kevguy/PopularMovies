@@ -54,6 +54,7 @@
         <item>@string/pref_sorts_ratings_desc</item>
     </string-array>
 
+    <string name="action_share">Share</string>
 
 
 
