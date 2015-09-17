@@ -28,21 +28,31 @@
     <string name="pref_sorts_label_ratings_desc">Ratings (Desc.)</string>
     <!-- Label for imperial option in temperature unit preference [CHAR LIMIT=25] -->
     <string name="pref_sorts_label_ratings_asc">Ratings (Asc.)</string>
+    <!-- Label for imperial option in temperature unit preference [CHAR LIMIT=25] -->
+    <string name="pref_sorts_label_votecount_desc">Vote Count (Desc.)</string>
+    <!-- Label for imperial option in temperature unit preference [CHAR LIMIT=25] -->
+    <string name="pref_sorts_label_votecount_asc">Vote Count (Asc.)</string>
     <!-- Key name for temperature unit preference in SharedPreferences [CHAR LIMIT=NONE] -->
     <string name="pref_sorts_key" translatable="false">sortoption</string>
     <!-- Value in SharedPreferences for metric temperature unit option [CHAR LIMIT=NONE] -->
     <string name="pref_sorts_popularity_desc" translatable="false">popularity.desc</string>
     <!-- Value in SharedPreferences for imperial temperature unit option [CHAR LIMIT=NONE] -->
-    <string name="pref_sorts_ratings_desc" translatable="false">vote_count.desc</string>
+    <string name="pref_sorts_ratings_desc" translatable="false">vote_average.desc</string>
+    <!-- Value in SharedPreferences for imperial temperature unit option [CHAR LIMIT=NONE] -->
+    <string name="pref_sorts_votecount_desc" translatable="false">vote_count.desc</string>
     <!-- Value in SharedPreferences for metric temperature unit option [CHAR LIMIT=NONE] -->
     <string name="pref_sorts_popularity_asc" translatable="false">popularity.asc</string>
     <!-- Value in SharedPreferences for imperial temperature unit option [CHAR LIMIT=NONE] -->
-    <string name="pref_sorts_ratings_asc" translatable="false">vote_count.asc</string>
+    <string name="pref_sorts_ratings_asc" translatable="false">vote_average.asc</string>
+    <!-- Value in SharedPreferences for imperial temperature unit option [CHAR LIMIT=NONE] -->
+    <string name="pref_sorts_votecount_asc" translatable="false">vote_count.asc</string>
     <string name="pref_sorts_default" translatable="false">popularity.desc</string>
 
     <string-array name="pref_sorts_options">
         <item>@string/pref_sorts_label_popularity_asc</item>
         <item>@string/pref_sorts_label_popularity_desc</item>
+        <item>@string/pref_sorts_label_votecount_asc</item>
+        <item>@string/pref_sorts_label_votecount_desc</item>
         <item>@string/pref_sorts_label_ratings_asc</item>
         <item>@string/pref_sorts_label_ratings_desc</item>
     </string-array>
@@ -50,6 +60,8 @@
     <string-array name="pref_sorts_values">
         <item>@string/pref_sorts_popularity_asc</item>
         <item>@string/pref_sorts_popularity_desc</item>
+        <item>@string/pref_sorts_votecount_asc</item>
+        <item>@string/pref_sorts_votecount_desc</item>
         <item>@string/pref_sorts_ratings_asc</item>
         <item>@string/pref_sorts_ratings_desc</item>
     </string-array>
