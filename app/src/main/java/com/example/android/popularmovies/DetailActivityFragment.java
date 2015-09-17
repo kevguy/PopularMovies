@@ -67,7 +67,7 @@ public class DetailActivityFragment extends Fragment {
 
             mOverviewStr = movieDetailArray.get(4);
             ((TextView) rootView.findViewById(R.id.detail_overview))
-                    .setText("Plot:" + mOverviewStr);
+                    .setText("Plot: " + mOverviewStr);
             mAdult = movieDetailArray.get(0);
             ((TextView) rootView.findViewById(R.id.detail_adult))
                     .setText("Adult: " + mAdult);
