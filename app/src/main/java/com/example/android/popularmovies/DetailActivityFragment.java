@@ -67,22 +67,22 @@ public class DetailActivityFragment extends Fragment {
 
             mOverviewStr = movieDetailArray.get(4);
             ((TextView) rootView.findViewById(R.id.detail_overview))
-                    .setText("Plot: " + mOverviewStr);
+                    .setText(mOverviewStr);
             mAdult = movieDetailArray.get(0);
             ((TextView) rootView.findViewById(R.id.detail_adult))
                     .setText("Adult: " + mAdult);
             mOrgLang = movieDetailArray.get(2);
             ((TextView) rootView.findViewById(R.id.detail_org_lang))
-                    .setText("Lang: " + mOrgLang);
+                    .setText("Language: " + mOrgLang);
             mOrgTitle = movieDetailArray.get(3);
             ((TextView) rootView.findViewById(R.id.detail_org_title))
-                    .setText("TItle: " + mOrgTitle);
+                    .setText(mOrgTitle);
             mRelDate = movieDetailArray.get(5);
             ((TextView) rootView.findViewById(R.id.detail_rel_date))
-                    .setText("Release Date: " + mRelDate);
+                    .setText(mRelDate);
             mVoteAvg = movieDetailArray.get(9);
             ((TextView) rootView.findViewById(R.id.detail_user_rating))
-                    .setText("User rating: " + mVoteAvg);
+                    .setText("Average rating: " + mVoteAvg);
             mImagePath = movieDetailArray.get(11);
             Picasso.with(getActivity())
                     .load("http://image.tmdb.org/t/p/w185/" + mImagePath)
