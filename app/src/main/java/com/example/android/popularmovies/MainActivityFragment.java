@@ -169,7 +169,7 @@ public class MainActivityFragment extends Fragment {
             try{
                 final String SORT_BY_PARAM = "sort_by";
                 final String API_KEY_PARAM = "api_key";
-                final String API_KEY = "";
+                final String API_KEY = "1f81622504d93fd944c771a94fefecfb";
 
                 // Construct the URL for the query
                 Uri.Builder builder = new Uri.Builder();
