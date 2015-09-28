@@ -63,6 +63,9 @@ public class MovieDbHelper extends SQLiteOpenHelper {
                 UserEntry.COLUMN_VIDEO + " BOOLEAN NOT NULL, " +
                 UserEntry.COLUMN_VOTE_AVG + " REAL NOT NULL, " +
                 UserEntry.COLUMN_VOTE_COUNT + " INTEGER NOT NULL, " +
+                UserEntry.COLUMN_FAVORITE + " BOOLEAN NOT NULL, " +
+                UserEntry.COLUMN_YOUTUBE + " TEXT NOT NULL, " +
+                UserEntry.COLUMN_REVIEW + " TEXT NOT NULL, " +
                 " FOREIGN KEY (" + UserEntry.COLUMN_MOVIE_KEY + ") REFERENCES " +
                 MovieEntry.TABLE_NAME + " (" + MovieEntry._ID + "), " +
                 " UNIQUE (" + UserEntry.COLUMN_MOVIE_KEY + ") ON CONFLICT REPLACE);";

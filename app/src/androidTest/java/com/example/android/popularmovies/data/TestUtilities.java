@@ -24,6 +24,8 @@ import java.util.Set;
 public class TestUtilities extends AndroidTestCase {
     static final String TEST_LOCATION = "99705";
     static final long TEST_DATE = 1419033600L;  // December 20th, 2014
+    static final String TEST_MOVIEID = "31415";
+    static final boolean TEST_FAVORITE = true;
 
     static void validateCursor(String error, Cursor valueCursor, ContentValues expectedValues) {
         assertTrue("Empty cursor returned. " + error, valueCursor.moveToFirst());
@@ -48,10 +50,13 @@ public class TestUtilities extends AndroidTestCase {
     static ContentValues createUserValues(long movieRowId) {
         ContentValues userValues = new ContentValues();
         userValues.put(MovieContract.UserEntry.COLUMN_MOVIE_KEY, movieRowId);
-        userValues.put(MovieContract.UserEntry.COLUMN_POPULARITY, 15.0);
+        userValues.put(MovieContract.UserEntry.COLUMN_POPULARITY, 15.3);
         userValues.put(MovieContract.UserEntry.COLUMN_VIDEO, "TRUE");
-        userValues.put(MovieContract.UserEntry.COLUMN_VOTE_AVG, 14.0);
+        userValues.put(MovieContract.UserEntry.COLUMN_VOTE_AVG, 14.2);
         userValues.put(MovieContract.UserEntry.COLUMN_VOTE_COUNT, 1000);
+        userValues.put(MovieContract.UserEntry.COLUMN_FAVORITE, Boolean.toString(TEST_FAVORITE).toUpperCase());
+        userValues.put(MovieContract.UserEntry.COLUMN_YOUTUBE, "Nothing");
+        userValues.put(MovieContract.UserEntry.COLUMN_REVIEW, "Nothing");
         return userValues;
     }
 
@@ -62,7 +67,7 @@ public class TestUtilities extends AndroidTestCase {
         ContentValues testValues = new ContentValues();
         testValues.put(MovieContract.MovieEntry.COLUMN_ADULT, "TRUE");
         testValues.put(MovieContract.MovieEntry.COLUMN_BACKDROP_PATH, "Backdrop path");
-        testValues.put(MovieContract.MovieEntry.COLUMN_MOVIE_ID, 31415);
+        testValues.put(MovieContract.MovieEntry.COLUMN_MOVIE_ID, Integer.parseInt(TEST_MOVIEID));
         testValues.put(MovieContract.MovieEntry.COLUMN_ORG_LANG, "en");
         testValues.put(MovieContract.MovieEntry.COLUMN_ORG_TITLE, "Kev Lai Rocks!");
         testValues.put(MovieContract.MovieEntry.COLUMN_OVERVIEW, "Kev Lai Always Rocks. Always!");
@@ -71,6 +76,25 @@ public class TestUtilities extends AndroidTestCase {
         testValues.put(MovieContract.MovieEntry.COLUMN_TITLE, "Kev Lai Rocks!");
 
         return testValues;
+    }
+
+    /*
+        Students: You can uncomment this function once you have finished creating the
+        LocationEntry part of the WeatherContract as well as the WeatherDbHelper.
+     */
+    static long insertKevLaiMovieValues(Context context) {
+        // insert our test records into the database
+        MovieDbHelper dbHelper = new MovieDbHelper(context);
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        ContentValues testValues = TestUtilities.createKevLaiMovieValues();
+
+        long locationRowId;
+        locationRowId = db.insert(MovieContract.MovieEntry.TABLE_NAME, null, testValues);
+
+        // Verify we got a row back.
+        assertTrue("Error: Failure to insert Kev Lai Movie Values", locationRowId != -1);
+
+        return locationRowId;
     }
 
 
