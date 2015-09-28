@@ -36,6 +36,8 @@ public class NetworkImageAdapter extends ArrayAdapter<String> {
     private ViewHolder viewHolder;
     private Context mContext;
 
+    public ArrayList<MovieData> mSuckDickMovieDataArray;
+
     private static class ViewHolder {
         private ImageView itemView;
     }
@@ -43,6 +45,7 @@ public class NetworkImageAdapter extends ArrayAdapter<String> {
     public NetworkImageAdapter(Context context, int textViewResourceId, ArrayList<String> items) {
         super(context, textViewResourceId, items);
         mContext = context;
+        mSuckDickMovieDataArray = new ArrayList<MovieData>();
     }
 
     public View getView(int position, View convertView, ViewGroup parent) {

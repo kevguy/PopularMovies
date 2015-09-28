@@ -20,6 +20,8 @@ public class MovieData {
     private boolean video;
     private double vote_average;
     private int vote_count;
+    private String YouTube;
+    private String Review;
 
     public MovieData(){
         genre_ids = new ArrayList<Integer>();
@@ -143,5 +145,21 @@ public class MovieData {
 
     public void setVoteCount(int data){
         vote_count = data;
+    }
+
+    public String getYouTube(){
+        return YouTube;
+    }
+
+    public void setYouTube(String data){
+        YouTube = data;
+    }
+
+    public String getReview(){
+        return YouTube;
+    }
+
+    public void setReview(String data){
+        YouTube = data;
     }
 }

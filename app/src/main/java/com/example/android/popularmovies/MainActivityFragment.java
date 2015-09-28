@@ -43,7 +43,7 @@ import java.util.Arrays;
 public class MainActivityFragment extends Fragment {
 
     NetworkImageAdapter mImageMovieAdapter;
-    ArrayList<MovieData> mMovieDataArray;
+    public ArrayList<MovieData> mMovieDataArray;
 
     public MainActivityFragment() {
     }
@@ -88,7 +88,8 @@ public class MainActivityFragment extends Fragment {
                 R.id.image_item_movie_imageview,
                 moviePosterPath);
 
-        mMovieDataArray = new ArrayList<MovieData>();
+        //mImageMovieAdapter.mSuckDickMovieDataArray = new ArrayList<MovieData>();
+        //mMovieDataArray = new ArrayList<MovieData>();
 
         GridView gridView = (GridView) rootView.findViewById(R.id.grid_view_movie);
         gridView.setAdapter(mImageMovieAdapter);
@@ -98,7 +99,7 @@ public class MainActivityFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
                 //String forecast = mImageMovieAdapter.getItem(position);
-                String forecast = mMovieDataArray.get(position).getOriginalTitle();
+                /*String forecast = mMovieDataArray.get(position).getOriginalTitle();
 
                 ArrayList<String> movieDetailArray = new ArrayList<String>();
                 movieDetailArray.add(0, Boolean.toString(mMovieDataArray.get(position).getAdult()));
@@ -112,7 +113,24 @@ public class MainActivityFragment extends Fragment {
                 movieDetailArray.add(8, Boolean.toString(mMovieDataArray.get(position).getVideo()));
                 movieDetailArray.add(9, Double.toString(mMovieDataArray.get(position).getVoteAvg()));
                 movieDetailArray.add(10, Integer.toString(mMovieDataArray.get(position).getVoteCount()));
-                movieDetailArray.add(11, mMovieDataArray.get(position).getPosterPath());
+                movieDetailArray.add(11, mMovieDataArray.get(position).getPosterPath());*/
+
+                String forecast = mImageMovieAdapter.mSuckDickMovieDataArray.get(position).getOriginalTitle();
+
+                ArrayList<String> movieDetailArray = new ArrayList<String>();
+                movieDetailArray.add(0, Boolean.toString(mImageMovieAdapter.mSuckDickMovieDataArray.get(position).getAdult()));
+                movieDetailArray.add(1, Long.toString(mImageMovieAdapter.mSuckDickMovieDataArray.get(position).getId()));
+                movieDetailArray.add(2, mImageMovieAdapter.mSuckDickMovieDataArray.get(position).getOriginalLanguage());
+                movieDetailArray.add(3, mImageMovieAdapter.mSuckDickMovieDataArray.get(position).getOriginalTitle());
+                movieDetailArray.add(4, mImageMovieAdapter.mSuckDickMovieDataArray.get(position).getOverview());
+                movieDetailArray.add(5, mImageMovieAdapter.mSuckDickMovieDataArray.get(position).getReleaseDate());
+                movieDetailArray.add(6, Double.toString(mImageMovieAdapter.mSuckDickMovieDataArray.get(position).getPopularity()));
+                movieDetailArray.add(7, mImageMovieAdapter.mSuckDickMovieDataArray.get(position).getTitle());
+                movieDetailArray.add(8, Boolean.toString(mImageMovieAdapter.mSuckDickMovieDataArray.get(position).getVideo()));
+                movieDetailArray.add(9, Double.toString(mImageMovieAdapter.mSuckDickMovieDataArray.get(position).getVoteAvg()));
+                movieDetailArray.add(10, Integer.toString(mImageMovieAdapter.mSuckDickMovieDataArray.get(position).getVoteCount()));
+                movieDetailArray.add(11, mImageMovieAdapter.mSuckDickMovieDataArray.get(position).getPosterPath());
+
                 Toast.makeText(getActivity(), forecast, Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(getActivity(), DetailActivity.class)
                         .putStringArrayListExtra(Intent.EXTRA_TEXT, movieDetailArray);
@@ -124,7 +142,8 @@ public class MainActivityFragment extends Fragment {
     }
 
     private void updateRecommendation() {
-        FetchMovieTask movieTask = new FetchMovieTask();
+        //FetchMovieTask movieTask = new FetchMovieTask();
+        FetchMovieTask movieTask = new FetchMovieTask(getActivity(), mImageMovieAdapter, mMovieDataArray);
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
         String sortOption = prefs.getString(getString(R.string.pref_sorts_key),
                 getString(R.string.pref_sorts_default));
@@ -139,7 +158,7 @@ public class MainActivityFragment extends Fragment {
         updateRecommendation();
     }
 
-    private class FetchMovieTask extends AsyncTask<String, Void, ArrayList<MovieData>> {
+    /*private class FetchMovieTask extends AsyncTask<String, Void, ArrayList<MovieData>> {
 
         private final String LOG_TAG = FetchMovieTask.class.getSimpleName();
 
@@ -256,13 +275,13 @@ public class MainActivityFragment extends Fragment {
             }
         }
 
-        /**
+        *//**
          * Take the String representing the complete forecast in JSON Format and
          * pull out the data we need to construct the Strings needed for the wireframes.
          *
          * Fortunately parsing is easy:  constructor takes the JSON string and converts it
          * into an Object hierarchy for us.
-         */
+         *//*
         private ArrayList<MovieData> getMovieDataFromJson(String movieJsonStr)
                 throws JSONException {
 
@@ -343,5 +362,5 @@ public class MainActivityFragment extends Fragment {
             return movieDataArray;
         }
 
-    }
+    }*/
 }
