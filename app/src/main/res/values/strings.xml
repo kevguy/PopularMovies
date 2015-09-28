@@ -25,6 +25,7 @@
     <string name="pref_sorts_label_ratings_asc">Lowest Ratings</string>
     <string name="pref_sorts_label_votecount_desc">Most Vote Count</string>
     <string name="pref_sorts_label_votecount_asc">Least Vote Count</string>
+    <string name="pref_sorts_label_favorites" translatable="false">Favorites</string>
     <string name="pref_sorts_key" translatable="false">sortoption</string>
     <string name="pref_sorts_popularity_desc" translatable="false">popularity.desc</string>
     <string name="pref_sorts_ratings_desc" translatable="false">vote_average.desc</string>
@@ -41,6 +42,7 @@
         <item>@string/pref_sorts_label_votecount_desc</item>
         <item>@string/pref_sorts_label_ratings_asc</item>
         <item>@string/pref_sorts_label_ratings_desc</item>
+        <item>@string/pref_sorts_label_favorites</item>
     </string-array>
 
     <string-array name="pref_sorts_values">

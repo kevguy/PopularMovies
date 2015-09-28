@@ -212,6 +212,64 @@ public class FetchMovieTask extends AsyncTask<String, Void, ArrayList<MovieData>
                 movieDataArray.get(k).setReview(ReviewLink);
             }
 
+            // Insert the new weather information into the database
+            Vector<ContentValues> cVVector = new Vector<ContentValues>(movieDataArray.size());
+
+
+
+            for (int k = 0; k < movieDataArray.size(); ++k){
+                ContentValues movieValues = new ContentValues();
+
+                long locationId = addMovie(Long.toString(movieDataArray.get(k).getId()),
+                        movieDataArray.get(k).getTitle(),
+                        movieDataArray.get(k).getBackdropPath(),
+                        Boolean.toString(movieDataArray.get(k).getAdult()),
+                        movieDataArray.get(k).getOriginalLanguage(),
+                        movieDataArray.get(k).getOriginalTitle(),
+                        movieDataArray.get(k).getOverview(),
+                        movieDataArray.get(k).getReleaseDate(),
+                        movieDataArray.get(k).getPosterPath());
+
+                movieValues.put(UserEntry.COLUMN_MOVIE_KEY, locationId);
+                movieValues.put(UserEntry.COLUMN_VOTE_AVG, Double.toString(movieDataArray.get(k).getVoteAvg()));
+                movieValues.put(UserEntry.COLUMN_VOTE_COUNT, Integer.toString(movieDataArray.get(k).getVoteCount()));
+                movieValues.put(UserEntry.COLUMN_VIDEO, Boolean.toString(movieDataArray.get(k).getVideo()));
+                movieValues.put(UserEntry.COLUMN_FAVORITE, Boolean.toString(true));
+                movieValues.put(UserEntry.COLUMN_POPULARITY, Double.toString(movieDataArray.get(k).getPopularity()));
+                movieValues.put(UserEntry.COLUMN_YOUTUBE, movieDataArray.get(k).getYouTube());
+                movieValues.put(UserEntry.COLUMN_REVIEW, movieDataArray.get(k).getReview());
+
+                cVVector.add(movieValues);
+            }
+
+
+            // add to database
+            if (cVVector.size() > 0) {
+                // Student: call bulkInsert to add the movieEntries to the database here
+                ContentValues[] cvArray = new ContentValues[cVVector.size()];
+                cVVector.toArray(cvArray);
+                mContext.getContentResolver().bulkInsert(UserEntry.CONTENT_URI, cvArray);
+            }
+
+            Cursor cur = mContext.getContentResolver().query(
+                    UserEntry.CONTENT_URI,
+                    null,
+                    null,
+                    null,
+                    null
+             );
+
+            cVVector = new Vector<ContentValues>(cur.getCount());
+            if (cur.moveToFirst()) {
+                do {
+                     ContentValues cv = new ContentValues();
+                     DatabaseUtils.cursorRowToContentValues(cur, cv);
+                     cVVector.add(cv);
+                } while (cur.moveToNext());
+            }
+
+            Log.d(LOG_TAG, "FetchWeatherTask Complete. " + cVVector.size() + " Inserted");
+
 
             return movieDataArray;
         }
@@ -630,7 +688,7 @@ public class FetchMovieTask extends AsyncTask<String, Void, ArrayList<MovieData>
 
 
         // Insert the new weather information into the database
-        Vector<ContentValues> cVVector = new Vector<ContentValues>(movieArray.length());
+        //Vector<ContentValues> cVVector = new Vector<ContentValues>(movieArray.length());
 
         for (int i = 0; i < movieArray.length(); ++i) {
             JSONObject itemMovie = movieArray.getJSONObject(i);
@@ -683,55 +741,55 @@ public class FetchMovieTask extends AsyncTask<String, Void, ArrayList<MovieData>
             Log.v(LOG_TAG, "Vote Avg " + Double.toString(movieDataArray.get(i).getVoteAvg()));
             Log.v(LOG_TAG, "Vote Count " + Integer.toString(movieDataArray.get(i).getVoteCount()));
 
-            ContentValues movieValues = new ContentValues();
-
-            long locationId = addMovie(Long.toString(movieData.getId()),
-                    movieData.getTitle(),
-                    movieData.getBackdropPath(),
-                    Boolean.toString(movieData.getAdult()),
-                    movieData.getOriginalLanguage(),
-                    movieData.getOriginalTitle(),
-                    movieData.getOverview(),
-                    movieData.getReleaseDate(),
-                    movieData.getPosterPath());
-
-
-            movieValues.put(UserEntry.COLUMN_MOVIE_KEY, locationId);
-            movieValues.put(UserEntry.COLUMN_VOTE_AVG, Double.toString(movieDataArray.get(i).getVoteAvg()));
-            movieValues.put(UserEntry.COLUMN_VOTE_COUNT, Integer.toString(movieDataArray.get(i).getVoteCount()));
-            movieValues.put(UserEntry.COLUMN_VIDEO, Boolean.toString(movieDataArray.get(i).getVideo()));
-            movieValues.put(UserEntry.COLUMN_FAVORITE, Boolean.toString(true));
-            movieValues.put(UserEntry.COLUMN_POPULARITY, Double.toString(movieDataArray.get(i).getPopularity()));
-
-            cVVector.add(movieValues);
+//            ContentValues movieValues = new ContentValues();
+//
+//            long locationId = addMovie(Long.toString(movieData.getId()),
+//                    movieData.getTitle(),
+//                    movieData.getBackdropPath(),
+//                    Boolean.toString(movieData.getAdult()),
+//                    movieData.getOriginalLanguage(),
+//                    movieData.getOriginalTitle(),
+//                    movieData.getOverview(),
+//                    movieData.getReleaseDate(),
+//                    movieData.getPosterPath());
+//
+//
+//            movieValues.put(UserEntry.COLUMN_MOVIE_KEY, locationId);
+//            movieValues.put(UserEntry.COLUMN_VOTE_AVG, Double.toString(movieDataArray.get(i).getVoteAvg()));
+//            movieValues.put(UserEntry.COLUMN_VOTE_COUNT, Integer.toString(movieDataArray.get(i).getVoteCount()));
+//            movieValues.put(UserEntry.COLUMN_VIDEO, Boolean.toString(movieDataArray.get(i).getVideo()));
+//            movieValues.put(UserEntry.COLUMN_FAVORITE, Boolean.toString(true));
+//            movieValues.put(UserEntry.COLUMN_POPULARITY, Double.toString(movieDataArray.get(i).getPopularity()));
+//
+//            cVVector.add(movieValues);
         }
 
         // add to database
-        if (cVVector.size() > 0) {
-            // Student: call bulkInsert to add the movieEntries to the database here
-            ContentValues[] cvArray = new ContentValues[cVVector.size()];
-            cVVector.toArray(cvArray);
-            mContext.getContentResolver().bulkInsert(UserEntry.CONTENT_URI, cvArray);
-        }
+//        if (cVVector.size() > 0) {
+//            // Student: call bulkInsert to add the movieEntries to the database here
+//            ContentValues[] cvArray = new ContentValues[cVVector.size()];
+//            cVVector.toArray(cvArray);
+//            mContext.getContentResolver().bulkInsert(UserEntry.CONTENT_URI, cvArray);
+//        }
+//
+//        Cursor cur = mContext.getContentResolver().query(
+//                UserEntry.CONTENT_URI,
+//                null,
+//                null,
+//                null,
+//                null
+//        );
+//
+//        cVVector = new Vector<ContentValues>(cur.getCount());
+//        if (cur.moveToFirst()) {
+//            do {
+//                ContentValues cv = new ContentValues();
+//                DatabaseUtils.cursorRowToContentValues(cur, cv);
+//                cVVector.add(cv);
+//            } while (cur.moveToNext());
+//        }
 
-        Cursor cur = mContext.getContentResolver().query(
-                UserEntry.CONTENT_URI,
-                null,
-                null,
-                null,
-                null
-        );
-
-        cVVector = new Vector<ContentValues>(cur.getCount());
-        if (cur.moveToFirst()) {
-            do {
-                ContentValues cv = new ContentValues();
-                DatabaseUtils.cursorRowToContentValues(cur, cv);
-                cVVector.add(cv);
-            } while (cur.moveToNext());
-        }
-
-        Log.d(LOG_TAG, "FetchWeatherTask Complete. " + cVVector.size() + " Inserted");
+        //Log.d(LOG_TAG, "FetchWeatherTask Complete. " + cVVector.size() + " Inserted");
 
         return movieDataArray;
         //} catch (JSONException e) {
