@@ -69,6 +69,10 @@ public class DetailActivity extends ActionBarActivity {
             return true;
         }
 
+        if (id == R.id.action_favorites){
+            startActivity(new Intent(this, FavoriteActivity.class));
+        }
+
         return super.onOptionsItemSelected(item);
     }
 }
