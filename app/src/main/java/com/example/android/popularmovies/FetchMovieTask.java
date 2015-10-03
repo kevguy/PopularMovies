@@ -148,7 +148,7 @@ public class FetchMovieTask extends AsyncTask<String, Void, ArrayList<MovieData>
                     .appendQueryParameter(SORT_BY_PARAM, params[0])
                     .appendQueryParameter(API_KEY_PARAM, API_KEY);
             URL url = new URL(builder.build().toString());
-            Log.v(LOG_TAG, url.toString());
+            //Log.v(LOG_TAG, url.toString());
 
             //URL url = new URL("http://api.themoviedb.org/3/discover/movie?sort_by=popularity.desc&api_key=1f81622504d93fd944c771a94fefecfb");
             // http://api.themoviedb.org/3/movie/24428/videos?api_key=1f81622504d93fd944c771a94fefecfb
@@ -181,7 +181,7 @@ public class FetchMovieTask extends AsyncTask<String, Void, ArrayList<MovieData>
                 return null;
             }
             movieJsonStr = buffer.toString();
-            Log.v(LOG_TAG, movieJsonStr);
+            //Log.v(LOG_TAG, movieJsonStr);
 
 
         }
@@ -318,7 +318,7 @@ public class FetchMovieTask extends AsyncTask<String, Void, ArrayList<MovieData>
                     .appendPath("videos")
                     .appendQueryParameter(API_KEY_PARAM, API_KEY);
             URL url = new URL(builder.build().toString());
-            Log.v(LOG_TAG, url.toString());
+            //Log.v(LOG_TAG, url.toString());
 
 
             //URL url = new URL("http://api.themoviedb.org/3/discover/movie?sort_by=popularity.desc&api_key=1f81622504d93fd944c771a94fefecfb");
@@ -352,7 +352,7 @@ public class FetchMovieTask extends AsyncTask<String, Void, ArrayList<MovieData>
                 return null;
             }
             movieYouTubeJsonStr = buffer.toString();
-            Log.v(LOG_TAG, movieYouTubeJsonStr);
+            //Log.v(LOG_TAG, movieYouTubeJsonStr);
 
 
         } catch (IOException e) {
@@ -436,7 +436,7 @@ public class FetchMovieTask extends AsyncTask<String, Void, ArrayList<MovieData>
         else
             return "Nothing";
 
-        Log.v(LOG_TAG, "YouTube " + link.toString());
+        //Log.v(LOG_TAG, "YouTube " + link.toString());
 
         // add to database
         //if (cVVector.size() > 0) {
@@ -497,7 +497,7 @@ public class FetchMovieTask extends AsyncTask<String, Void, ArrayList<MovieData>
                     .appendPath("reviews")
                     .appendQueryParameter(API_KEY_PARAM, API_KEY);
             URL url = new URL(builder.build().toString());
-            Log.v(LOG_TAG, url.toString());
+            //Log.v(LOG_TAG, url.toString());
 
 
             //URL url = new URL("http://api.themoviedb.org/3/discover/movie?sort_by=popularity.desc&api_key=1f81622504d93fd944c771a94fefecfb");
@@ -531,7 +531,7 @@ public class FetchMovieTask extends AsyncTask<String, Void, ArrayList<MovieData>
                 return null;
             }
             movieYouTubeJsonStr = buffer.toString();
-            Log.v(LOG_TAG, movieYouTubeJsonStr);
+            //Log.v(LOG_TAG, movieYouTubeJsonStr);
 
 
         } catch (IOException e) {
@@ -613,7 +613,7 @@ public class FetchMovieTask extends AsyncTask<String, Void, ArrayList<MovieData>
             return "Nothing";
         }
 
-        Log.v(LOG_TAG, "Review " + link.toString());
+        //Log.v(LOG_TAG, "Review " + link.toString());
 
         // add to database
         //if (cVVector.size() > 0) {

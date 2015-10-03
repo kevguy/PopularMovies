@@ -8,6 +8,7 @@ import android.os.AsyncTask;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.widget.ActionMenuView;
 import android.text.format.Time;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -42,6 +43,8 @@ import java.util.Arrays;
  */
 public class MainActivityFragment extends Fragment {
 
+    private static final String LOG_TAG = MainActivityFragment.class.getSimpleName();
+
     NetworkImageAdapter mImageMovieAdapter;
     public ArrayList<MovieData> mMovieDataArray;
 
@@ -59,6 +62,7 @@ public class MainActivityFragment extends Fragment {
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         // Inflate the menu; this adds items to the action bar if it is present.
         inflater.inflate(R.menu.moviefragment, menu);
+
     }
 
     @Override
@@ -74,6 +78,43 @@ public class MainActivityFragment extends Fragment {
             return true;
         }
 
+        if (id == R.id.action_favorites){
+            Log.d(LOG_TAG, "SoSad");
+            item.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+                @Override
+                public boolean onMenuItemClick(MenuItem item) {
+                    ArrayList<MovieDataPar> movieDetailArray = new ArrayList<MovieDataPar>();
+                    for (int i = 0; i < mImageMovieAdapter.mSuckDickMovieDataArray.size(); ++i) {
+                        MovieDataPar movieDetailPar = new MovieDataPar();
+                        movieDetailPar.setAdult(Boolean.toString(mImageMovieAdapter.mSuckDickMovieDataArray.get(i).getAdult()));
+                        movieDetailPar.setBackdropPath(mImageMovieAdapter.mSuckDickMovieDataArray.get(i).getBackdropPath());
+                        movieDetailPar.setMovieId(Long.toString(mImageMovieAdapter.mSuckDickMovieDataArray.get(i).getId()));
+                        movieDetailPar.setOriginalLanguage(mImageMovieAdapter.mSuckDickMovieDataArray.get(i).getOriginalLanguage());
+                        movieDetailPar.setOriginalTitle(mImageMovieAdapter.mSuckDickMovieDataArray.get(i).getOriginalTitle());
+                        movieDetailPar.setOverview(mImageMovieAdapter.mSuckDickMovieDataArray.get(i).getOverview());
+                        movieDetailPar.setReleaseDate(mImageMovieAdapter.mSuckDickMovieDataArray.get(i).getReleaseDate());
+                        movieDetailPar.setPosterPath(mImageMovieAdapter.mSuckDickMovieDataArray.get(i).getPosterPath());
+                        movieDetailPar.setPopularity(Double.toString(mImageMovieAdapter.mSuckDickMovieDataArray.get(i).getPopularity()));
+                        movieDetailPar.setTitle(mImageMovieAdapter.mSuckDickMovieDataArray.get(i).getTitle());
+                        movieDetailPar.setVideo(Boolean.toString(mImageMovieAdapter.mSuckDickMovieDataArray.get(i).getVideo()));
+                        movieDetailPar.setVoteAvg(Double.toString(mImageMovieAdapter.mSuckDickMovieDataArray.get(i).getVoteAvg()));
+                        movieDetailPar.setVoteCount(Integer.toString(mImageMovieAdapter.mSuckDickMovieDataArray.get(i).getVoteCount()));
+                        movieDetailPar.setYouTube(mImageMovieAdapter.mSuckDickMovieDataArray.get(i).getYouTube());
+                        movieDetailPar.setReview(mImageMovieAdapter.mSuckDickMovieDataArray.get(i).getReview());
+                        movieDetailArray.add(i, movieDetailPar);
+                    }
+                    Intent intent = new Intent(getActivity(), FavoriteActivity.class)
+                            .putParcelableArrayListExtra(Intent.EXTRA_PROCESS_TEXT, movieDetailArray);
+                    startActivity(intent);
+//
+                    //startActivity(new Intent(getActivity(), FavoriteActivity.class));
+                    return true;
+                }
+            });
+
+            //startActivity(new Intent(getActivity(), FavoriteActivity.class));
+            return true;
+        }
         return super.onOptionsItemSelected(item);
     }
 
@@ -98,23 +139,6 @@ public class MainActivityFragment extends Fragment {
 
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
-                //String forecast = mImageMovieAdapter.getItem(position);
-                /*String forecast = mMovieDataArray.get(position).getOriginalTitle();
-
-                ArrayList<String> movieDetailArray = new ArrayList<String>();
-                movieDetailArray.add(0, Boolean.toString(mMovieDataArray.get(position).getAdult()));
-                movieDetailArray.add(1, Long.toString(mMovieDataArray.get(position).getId()));
-                movieDetailArray.add(2, mMovieDataArray.get(position).getOriginalLanguage());
-                movieDetailArray.add(3, mMovieDataArray.get(position).getOriginalTitle());
-                movieDetailArray.add(4, mMovieDataArray.get(position).getOverview());
-                movieDetailArray.add(5, mMovieDataArray.get(position).getReleaseDate());
-                movieDetailArray.add(6, Double.toString(mMovieDataArray.get(position).getPopularity()));
-                movieDetailArray.add(7, mMovieDataArray.get(position).getTitle());
-                movieDetailArray.add(8, Boolean.toString(mMovieDataArray.get(position).getVideo()));
-                movieDetailArray.add(9, Double.toString(mMovieDataArray.get(position).getVoteAvg()));
-                movieDetailArray.add(10, Integer.toString(mMovieDataArray.get(position).getVoteCount()));
-                movieDetailArray.add(11, mMovieDataArray.get(position).getPosterPath());*/
-
                 String forecast = mImageMovieAdapter.mSuckDickMovieDataArray.get(position).getOriginalTitle();
 
                 ArrayList<String> movieDetailArray = new ArrayList<String>();

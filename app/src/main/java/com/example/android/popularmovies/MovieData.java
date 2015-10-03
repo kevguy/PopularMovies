@@ -156,10 +156,10 @@ public class MovieData {
     }
 
     public String getReview(){
-        return YouTube;
+        return Review;
     }
 
     public void setReview(String data){
-        YouTube = data;
+        Review = data;
     }
 }

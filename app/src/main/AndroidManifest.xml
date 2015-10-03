@@ -34,8 +34,19 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="MainActivity" />
         </activity>
+
         <provider
-            android:authorities="com.example.android.popularmovies"
-            android:name=".data.MovieProvider" />
+            android:name=".data.MovieProvider"
+            android:authorities="com.example.android.popularmovies" />
+
+        <activity
+            android:name=".FavoriteActivity"
+            android:label="@string/title_activity_favorite"
+            android:parentActivityName=".MainActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="MainActivity" />
+        </activity>
     </application>
+
 </manifest>

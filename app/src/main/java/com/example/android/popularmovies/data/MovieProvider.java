@@ -47,6 +47,7 @@ public class MovieProvider extends ContentProvider {
 
     //private static final SQLiteQueryBuilder sWeatherByLocationSettingQueryBuilder;
     private static final SQLiteQueryBuilder sUserByMovieIDQueryBuilder;
+    private static final SQLiteQueryBuilder sSuperUserBuilder;
 
     static{
         sUserByMovieIDQueryBuilder = new SQLiteQueryBuilder();
@@ -54,6 +55,18 @@ public class MovieProvider extends ContentProvider {
         //This is an inner join which looks like
         //user INNER JOIN movie ON user.movie_id = movie._id
         sUserByMovieIDQueryBuilder.setTables(
+                MovieContract.UserEntry.TABLE_NAME + " INNER JOIN " +
+                        MovieContract.MovieEntry.TABLE_NAME +
+                        " ON " + MovieContract.UserEntry.TABLE_NAME +
+                        "." + MovieContract.UserEntry.COLUMN_MOVIE_KEY +
+                        " = " + MovieContract.MovieEntry.TABLE_NAME +
+                        "." + MovieContract.MovieEntry._ID);
+    }
+
+    static{
+        sSuperUserBuilder = new SQLiteQueryBuilder();
+
+        sSuperUserBuilder.setTables(
                 MovieContract.UserEntry.TABLE_NAME + " INNER JOIN " +
                         MovieContract.MovieEntry.TABLE_NAME +
                         " ON " + MovieContract.UserEntry.TABLE_NAME +
@@ -308,8 +321,7 @@ public class MovieProvider extends ContentProvider {
             }
             // "user"
             case USER:
-                retCursor = mOpenHelper.getReadableDatabase().query(
-                        MovieContract.UserEntry.TABLE_NAME,
+                retCursor = sSuperUserBuilder.query(mOpenHelper.getReadableDatabase(),
                         projection,
                         selection,
                         selectionArgs,
@@ -317,6 +329,18 @@ public class MovieProvider extends ContentProvider {
                         null,
                         sortOrder
                 );
+
+
+
+/*                retCursor = mOpenHelper.getReadableDatabase().query(
+                        //MovieContract.UserEntry.TABLE_NAME,
+                        projection,
+                        selection,
+                        selectionArgs,
+                        null,
+                        null,
+                        sortOrder
+                );*/
                 break;
             case MOVIEID:
                 retCursor = mOpenHelper.getReadableDatabase().query(
