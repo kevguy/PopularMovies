@@ -1,8 +1,6 @@
 package com.example.android.popularmovies;
 
-import android.content.Intent;
 import android.database.Cursor;
-import android.net.Uri;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.v4.app.LoaderManager;
@@ -11,25 +9,23 @@ import android.support.v4.content.Loader;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.GridView;
-import android.widget.ImageView;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.android.popularmovies.data.MovieContract;
-import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
 /**
  * A placeholder fragment containing a simple view.
  */
-public class FavoriteActivityFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>{
+/**
+ * A placeholder fragment containing a simple view.
+ */
+public class HistoryActivityFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>{
 
     private static final int MOVIE_LOADER = 0;
 
-    FavMovieCursorAdapter mImageMovieAdapter;
+    HistMovieCursorAdapter mImageMovieAdapter;
 
     private static final String[] MOVIE_COLUMNS = {
             MovieContract.UserEntry.TABLE_NAME + "." + MovieContract.UserEntry._ID,
@@ -70,17 +66,17 @@ public class FavoriteActivityFragment extends Fragment implements LoaderManager.
     static final int COL_OVERVIEW = 16;
 
 
-    public FavoriteActivityFragment() {
+    public HistoryActivityFragment() {
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_favorite, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_history, container, false);
 
         ArrayList<String> moviePosterPath = new ArrayList<String>();
 
-        mImageMovieAdapter = new FavMovieCursorAdapter(getActivity(), null, 0);
+        mImageMovieAdapter = new HistMovieCursorAdapter(getActivity(), null, 0);
 
 //        mImageMovieAdapter = new NetworkImageAdapter(getActivity(),
 //                R.id.fav_image_item_movie_imageview,
@@ -92,7 +88,7 @@ public class FavoriteActivityFragment extends Fragment implements LoaderManager.
 //        GridView gridView = (GridView) rootView.findViewById(R.id.grid_view_favorite_movie);
 //        gridView.setAdapter(mImageMovieAdapter);
 
-        GridView gridView = (GridView) rootView.findViewById(R.id.grid_view_favorite_movie);
+        GridView gridView = (GridView) rootView.findViewById(R.id.grid_view_history_movie);
         gridView.setAdapter(mImageMovieAdapter);
         return rootView;
     }

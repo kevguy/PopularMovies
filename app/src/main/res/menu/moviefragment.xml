@@ -10,4 +10,8 @@
         android:title = "Favorites"
         app:showAsAction = "never"
         />
+    <item android:id = "@+id/action_history"
+        android:title = "History"
+        app:showAsAction = "never"
+        />
 </menu>

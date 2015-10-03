@@ -37,26 +37,20 @@
     <string name="pref_sorts_default" translatable="false">popularity.desc</string>
 
     <string-array name="pref_sorts_options">
-        <item>@string/pref_sorts_label_popularity_asc</item>
         <item>@string/pref_sorts_label_popularity_desc</item>
-        <item>@string/pref_sorts_label_votecount_asc</item>
         <item>@string/pref_sorts_label_votecount_desc</item>
-        <item>@string/pref_sorts_label_ratings_asc</item>
         <item>@string/pref_sorts_label_ratings_desc</item>
-        <item>@string/pref_sorts_label_favorites</item>
     </string-array>
 
     <string-array name="pref_sorts_values">
-        <item>@string/pref_sorts_popularity_asc</item>
         <item>@string/pref_sorts_popularity_desc</item>
-        <item>@string/pref_sorts_votecount_asc</item>
         <item>@string/pref_sorts_votecount_desc</item>
-        <item>@string/pref_sorts_ratings_asc</item>
         <item>@string/pref_sorts_ratings_desc</item>
     </string-array>
 
     <string name="action_share">Share</string>
     <string name="title_activity_favorite">FavoriteActivity</string>
+    <string name="title_activity_history">HistoryActivity</string>
 
 
 
