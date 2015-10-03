@@ -335,7 +335,7 @@ public class FetchMovieTask extends AsyncTask<String, Void, ArrayList<MovieData>
             InputStream inputStream = urlConnection.getInputStream();
             StringBuffer buffer = new StringBuffer();
             if (inputStream == null) {
-                return null;
+                return "Nothing";
             }
             reader = new BufferedReader(new InputStreamReader(inputStream));
 
@@ -349,7 +349,7 @@ public class FetchMovieTask extends AsyncTask<String, Void, ArrayList<MovieData>
 
             if (buffer.length() == 0) {
                 // Stream was empty. No point in parsing.
-                return null;
+                return "Nothing";
             }
             movieYouTubeJsonStr = buffer.toString();
             //Log.v(LOG_TAG, movieYouTubeJsonStr);
@@ -359,7 +359,7 @@ public class FetchMovieTask extends AsyncTask<String, Void, ArrayList<MovieData>
             Log.e(LOG_TAG, "Error ", e);
             // If the code didn't successfully get the movie data, there's no point in attempting
             // to parse it.
-            return null;
+            return "Nothing";
         } finally {
             if (urlConnection != null) {
                 urlConnection.disconnect();
@@ -380,7 +380,7 @@ public class FetchMovieTask extends AsyncTask<String, Void, ArrayList<MovieData>
             Log.e(LOG_TAG, "Error getting weather data from json", e);
             e.printStackTrace();
         }
-        return null;
+        return "Nothing";
     }
 
     private String getMovieYouTubeFromJson(String movieYouTubeJsonStr)
@@ -514,7 +514,7 @@ public class FetchMovieTask extends AsyncTask<String, Void, ArrayList<MovieData>
             InputStream inputStream = urlConnection.getInputStream();
             StringBuffer buffer = new StringBuffer();
             if (inputStream == null) {
-                return null;
+                return "Nothing";
             }
             reader = new BufferedReader(new InputStreamReader(inputStream));
 
@@ -528,7 +528,7 @@ public class FetchMovieTask extends AsyncTask<String, Void, ArrayList<MovieData>
 
             if (buffer.length() == 0) {
                 // Stream was empty. No point in parsing.
-                return null;
+                return "Nothing";
             }
             movieYouTubeJsonStr = buffer.toString();
             //Log.v(LOG_TAG, movieYouTubeJsonStr);
@@ -538,7 +538,7 @@ public class FetchMovieTask extends AsyncTask<String, Void, ArrayList<MovieData>
             Log.e(LOG_TAG, "Error ", e);
             // If the code didn't successfully get the movie data, there's no point in attempting
             // to parse it.
-            return null;
+            return "Nothing";
         } finally {
             if (urlConnection != null) {
                 urlConnection.disconnect();
@@ -559,7 +559,7 @@ public class FetchMovieTask extends AsyncTask<String, Void, ArrayList<MovieData>
             Log.e(LOG_TAG, "Error getting weather data from json", e);
             e.printStackTrace();
         }
-        return null;
+        return "Nothing";
     }
 
     private String getMovieReviewFromJson(String movieYouTubeJsonStr)

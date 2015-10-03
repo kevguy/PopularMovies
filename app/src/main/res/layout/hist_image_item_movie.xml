@@ -5,4 +5,4 @@
     android:layout_height="wrap_content"
     android:gravity="fill"
     android:adjustViewBounds="true"
-    android:id="@+id/fav_image_item_movie_imageview" />
+    android:id="@+id/hist_image_item_movie_imageview" />

@@ -78,6 +78,10 @@ public class MainActivityFragment extends Fragment {
             return true;
         }
 
+        if (id == R.id.action_history) {
+            startActivity(new Intent(getActivity(), HistoryActivity.class));
+        }
+
         if (id == R.id.action_favorites){
             Log.d(LOG_TAG, "SoSad");
             item.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
