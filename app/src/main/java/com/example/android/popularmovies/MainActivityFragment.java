@@ -43,6 +43,7 @@ import java.util.Arrays;
  */
 public class MainActivityFragment extends Fragment {
 
+
     private static final String LOG_TAG = MainActivityFragment.class.getSimpleName();
 
     NetworkImageAdapter mImageMovieAdapter;
@@ -158,6 +159,9 @@ public class MainActivityFragment extends Fragment {
                 movieDetailArray.add(9, Double.toString(mImageMovieAdapter.mSuckDickMovieDataArray.get(position).getVoteAvg()));
                 movieDetailArray.add(10, Integer.toString(mImageMovieAdapter.mSuckDickMovieDataArray.get(position).getVoteCount()));
                 movieDetailArray.add(11, mImageMovieAdapter.mSuckDickMovieDataArray.get(position).getPosterPath());
+                movieDetailArray.add(12, mImageMovieAdapter.mSuckDickMovieDataArray.get(position).getReview());
+                movieDetailArray.add(13, mImageMovieAdapter.mSuckDickMovieDataArray.get(position).getYouTube());
+                movieDetailArray.add(14, Long.toString(mImageMovieAdapter.mSuckDickMovieDataArray.get(position).getId()));
 
                 Toast.makeText(getActivity(), forecast, Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(getActivity(), DetailActivity.class)
