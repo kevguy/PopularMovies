@@ -6,31 +6,35 @@ import android.os.Parcelable;
 import java.util.ArrayList;
 
 public class MovieDataPar implements Parcelable {
-    private String adult;
+
+    private boolean adult;
     private String backdrop_path;
-    private String movieId;
+    private ArrayList<Integer> genre_ids;
+    private long movieId;
     private String original_language;
     private String original_title;
     private String overview;
     private String release_date;
     private String poster_path;
-    private String popularity;
+    private double popularity;
     private String title;
-    private String video;
-    private String vote_average;
-    private String vote_count;
-    private String youtube;
+    private boolean video;
+    private double vote_average;
+    private int vote_count;
+    private String YouTube;
     private String review;
+
+
 
 
     public MovieDataPar(){
     }
 
-    public String getAdult(){
+    public boolean getAdult(){
         return adult;
     }
 
-    public void setAdult(String choice){
+    public void setAdult(boolean choice){
         adult = choice;
     }
 
@@ -42,11 +46,27 @@ public class MovieDataPar implements Parcelable {
         backdrop_path = path;
     }
 
-    public String getMovieId(){
+    public ArrayList<Integer> getGenreIds(){
+        return genre_ids;
+    }
+
+    public void setGenreIds(ArrayList<Integer> input){
+        genre_ids = input;
+    }
+
+    public int getGenreIdsItem(int position){
+        return genre_ids.get(position);
+    }
+
+    public void setGenreIdsItem(int position, int data){
+        genre_ids.set(position, data);
+    }
+
+    public long getMovieId(){
         return movieId;
     }
 
-    public void setMovieId(String data){
+    public void setMovieId(long data){
         movieId = data;
     }
 
@@ -90,11 +110,11 @@ public class MovieDataPar implements Parcelable {
         poster_path = data;
     }
 
-    public String getPopularity(){
+    public double getPopularity(){
         return popularity;
     }
 
-    public void setPopularity(String data){
+    public void setPopularity(double data){
         popularity = data;
     }
 
@@ -106,36 +126,36 @@ public class MovieDataPar implements Parcelable {
         title = data;
     }
 
-    public String getVideo(){
+    public boolean getVideo(){
         return video;
     }
 
-    public void setVideo(String data){
+    public void setVideo(boolean data){
         video = data;
     }
 
-    public String getVoteAvg(){
+    public double getVoteAvg(){
         return vote_average;
     }
 
-    public void setVoteAvg(String data){
+    public void setVoteAvg(double data){
         vote_average = data;
     }
 
-    public String getVoteCount(){
+    public int getVoteCount(){
         return vote_count;
     }
 
-    public void setVoteCount(String data){
+    public void setVoteCount(int data){
         vote_count = data;
     }
 
     public String getYouTube(){
-        return youtube;
+        return YouTube;
     }
 
     public void setYouTube(String data){
-        youtube = data;
+        YouTube = data;
     }
 
     public String getReview(){
@@ -166,20 +186,20 @@ public class MovieDataPar implements Parcelable {
         //this.name = data[1];
         //this.grade = data[2];
 
-        this.adult = data[0];
+        this.adult = Boolean.parseBoolean(data[0]);
         this.backdrop_path = data[1];
-        this.movieId = data[2];
+        this.movieId = Long.parseLong(data[2]);
         this.original_language = data[3];
         this.original_title = data[4];
         this.overview = data[5];
         this.release_date = data[6];
         this.poster_path = data[7];
-        this.popularity = data[8];
+        this.popularity = Double.parseDouble(data[8]);
         this.title = data[9];
-        this.video = data[10];
-        this.vote_average = data[11];
-        this.vote_count = data[12];
-        this.youtube = data[13];
+        this.video = Boolean.parseBoolean(data[10]);
+        this.vote_average = Double.parseDouble(data[11]);
+        this.vote_count = Integer.parseInt(data[12]);
+        this.YouTube = data[13];
         this.review = data[14];
     }
 
@@ -190,20 +210,20 @@ public class MovieDataPar implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeStringArray(new String[] {this.adult,
+        dest.writeStringArray(new String[] {Boolean.toString(this.adult),
                                             this.backdrop_path,
-                                            this.movieId,
+                                            Long.toString(this.movieId),
                                             this.original_language,
                                             this.original_title,
                                             this.overview,
                                             this.release_date,
                                             this.poster_path,
-                                            this.popularity,
+                                            Double.toString(this.popularity),
                                             this.title,
-                                            this.video,
-                                            this.vote_average,
-                                            this.vote_count,
-                                            this.youtube,
+                                            Boolean.toString(this.video),
+                                            Double.toString(this.vote_average),
+                                            Integer.toString(this.vote_count),
+                                            this.YouTube,
                                             this.review});
     }
     public static final Parcelable.Creator CREATOR = new Parcelable.Creator() {
