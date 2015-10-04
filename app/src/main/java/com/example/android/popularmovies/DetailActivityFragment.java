@@ -43,6 +43,7 @@ public class DetailActivityFragment extends Fragment {
     private ArrayAdapter<String> mYouTubeAdapter;
     ArrayList<String> mYouTubeArray;
     ArrayList<String> mFavoriteList;
+    String mYouTubeLink = "Nothing";
     boolean mLike;
 
 
@@ -117,6 +118,7 @@ public class DetailActivityFragment extends Fragment {
 
             //mReviewArray.add(0, movieDetailArray.get(12));
             mYouTubeArray = new ArrayList<String>(Arrays.asList(movieDetailArray.get(13).split("\\s*,\\s*")));
+            mYouTubeLink = mYouTubeArray.get(0);
             //mYouTubeArray.add(movieDetailArray.get(13));
 
             String review = movieDetailArray.get(12);
@@ -256,8 +258,10 @@ public class DetailActivityFragment extends Fragment {
         shareIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
         //shareIntent.setType("text/plain");
         shareIntent.setType("text/html");
+//        shareIntent.putExtra(Intent.EXTRA_TEXT,
+//                "I like the movie" + mOrgTitle + "!" + MOVIE_SHARE_HASHTAG);
         shareIntent.putExtra(Intent.EXTRA_TEXT,
-                "I like the movie" + mOrgTitle + "!" + MOVIE_SHARE_HASHTAG);
+                mYouTubeLink);
         return shareIntent;
     }
 

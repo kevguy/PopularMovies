@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +15,7 @@ import android.widget.GridView;
 import com.example.android.popularmovies.data.MovieContract;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * A placeholder fragment containing a simple view.
@@ -22,6 +24,8 @@ import java.util.ArrayList;
  * A placeholder fragment containing a simple view.
  */
 public class HistoryActivityFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>{
+
+    private static final String LOG_TAG = HistoryActivityFragment.class.getSimpleName();
 
     private static final int MOVIE_LOADER = 0;
 
@@ -120,11 +124,44 @@ public class HistoryActivityFragment extends Fragment implements LoaderManager.L
         //Uri weatherForLocationUri = MovieContract.UserEntry.buildUserMovieWithFavorite(
         //        sortSetting);
 
+//        return new CursorLoader(getActivity(),
+//                MovieContract.UserEntry.CONTENT_URI,
+//                MOVIE_COLUMNS,
+//                null,
+//                null,
+//                sortOrder);
+
+        SharedFavoritePreferences sharedFavoritePreferences = new SharedFavoritePreferences();
+        String output = sharedFavoritePreferences.getFavorites(getContext());
+        Log.v(LOG_TAG, output);
+        ArrayList<String> FavoriteList = new ArrayList<String>(Arrays.asList(output.split("\\s*,\\s*")));
+        String selection = "";
+        ArrayList<String> argument = new ArrayList<String>();
+
+        for (String item : FavoriteList){
+            if (!(item.equals(""))){
+                selection += MovieContract.MovieEntry.COLUMN_MOVIE_ID + " = ? OR ";
+                argument.add(item);
+            }
+        }
+        selection = selection.substring(0, selection.length() - 3);
+        Log.v(LOG_TAG, selection);
+        String[] argumentArray = new String[argument.size()];
+        argument.toArray(argumentArray);
+
+
+//        return new CursorLoader(getActivity(),
+//                MovieContract.UserEntry.CONTENT_URI,
+//                MOVIE_COLUMNS,
+//                MovieContract.MovieEntry.COLUMN_MOVIE_ID + " = ?",
+//                new String[]{"24428"},
+//                sortOrder);
+
         return new CursorLoader(getActivity(),
                 MovieContract.UserEntry.CONTENT_URI,
                 MOVIE_COLUMNS,
-                null,
-                null,
+                selection,
+                argumentArray,
                 sortOrder);
     }
 
