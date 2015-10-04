@@ -48,9 +48,23 @@ public class SharedFavoritePreferences {
 
     public void removeFavorite(Context context, String movieId) {
         String favorites = getFavorites(context);
+        Log.v(LOG_TAG, favorites);
         if (favorites != null) {
             int pos = favorites.indexOf("," + movieId);
-            favorites = favorites.substring(0, pos -1) + favorites.substring(pos + movieId.length() + 1, favorites.length() - 1);
+
+            if (pos==0) {
+                if (pos + movieId.length() >= favorites.length()){
+                    favorites = "";
+                } else {
+                    favorites = favorites.substring(pos + movieId.length() + 1, favorites.length());
+                }
+            } else if (pos + movieId.length() + 1 >= favorites.length()) {
+                favorites = favorites.substring(0, pos);
+            } else {
+                favorites = favorites.substring(0, pos) + favorites.substring(pos + movieId.length() + 1, favorites.length());
+            }
+
+            Log.v(LOG_TAG, favorites);
             saveFavorites(context, favorites);
         }
     }
