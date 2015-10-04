@@ -1,6 +1,9 @@
 package com.example.android.popularmovies;
 
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.Cursor;
+import android.net.Uri;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
@@ -12,17 +15,34 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ListAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
+import android.view.View.OnClickListener;
 
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * A placeholder fragment containing a simple view.
  */
 public class DetailActivityFragment extends Fragment {
+
+
+    SharedFavoritePreferences sharedFavoritePreferences;
+
+    private ArrayAdapter<String> mReviewAdapter;
+    ArrayList<String> mReviewArray;
+    private ArrayAdapter<String> mYouTubeAdapter;
+    ArrayList<String> mYouTubeArray;
+
 
     /*
      movieDetailArray.add(0, Boolean.toString(mMovieDataArray.get(position).getAdult()));
@@ -46,6 +66,7 @@ public class DetailActivityFragment extends Fragment {
     private String mRelDate;
     private String mVoteAvg;
     private String mImagePath;
+    private String mMovieId;
     private static final String MOVIE_SHARE_HASHTAG = " #PopularMovie";
 
     public DetailActivityFragment() {
@@ -57,6 +78,9 @@ public class DetailActivityFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         View rootView = inflater.inflate(R.layout.fragment_detail, container, false);
+
+        ArrayList<String> mReviewArray = new ArrayList<String>();
+        ArrayList<String> mYouTubeArray = new ArrayList<String>();
 
 
         // The detail Activity called via intent.  Inspect the intent for forecast data.
@@ -87,7 +111,97 @@ public class DetailActivityFragment extends Fragment {
             Picasso.with(getActivity())
                     .load("http://image.tmdb.org/t/p/w185/" + mImagePath)
                     .into((ImageView) rootView.findViewById(R.id.detail_image));
+            mMovieId = movieDetailArray.get(14);
+
+            //mReviewArray.add(0, movieDetailArray.get(12));
+            mYouTubeArray = new ArrayList<String>(Arrays.asList(movieDetailArray.get(13).split("\\s*,\\s*")));
+            //mYouTubeArray.add(movieDetailArray.get(13));
+
+            String review = movieDetailArray.get(12);
+            TextView tv = (TextView) rootView.findViewById(R.id.review_textview);
+
+            String reviewStr = "";
+            if (!(review.equals("Nothing"))) {
+                while (review != null) {
+
+                    if (review.indexOf("<author>") >= 0 && review.indexOf("</author>") >= 0
+                            && review.indexOf("<content>") >= 0 && review.indexOf("</content>") >= 0) {
+                        mReviewArray.add(review.substring(review.indexOf("<author>") + 8, review.indexOf("</author>")) + ": \n\n" +
+                                review.substring(review.indexOf("<content>") + 9, review.indexOf("</content>") - 1));
+
+                        reviewStr = reviewStr + "\n\n\n\n\"" + review.substring(review.indexOf("<content>") + 9, review.indexOf("</content>") - 1) +
+                                "\"\n- by " +
+                                review.substring(review.indexOf("<author>") + 8, review.indexOf("</author>"));
+
+                        if (review.indexOf("</content>") + 10 < review.length()) {
+                            review = review.substring(review.indexOf("</content>") + 10, review.length() - 1);
+                        } else
+                            review = null;
+                    } else
+                        review = null;
+
+
+                }
+            }
+
+            tv.setText(reviewStr);
+
+
+
+
         }
+
+//        mReviewAdapter =
+//                new ArrayAdapter<String>(
+//                        getActivity(),
+//                        R.layout.review_item_movie,
+//                        R.id.review_item_movie_textview,
+//                        mReviewArray);
+//
+//        ListView reviewListView = (ListView) rootView.findViewById(R.id.listview_review);
+//        reviewListView.setAdapter(mReviewAdapter);
+//        setListViewHeightBasedOnChildren(reviewListView);
+
+        mYouTubeAdapter =
+                new ArrayAdapter<String>(
+                        getActivity(),
+                        R.layout.video_item_movie,
+                        R.id.video_item_movie_textview,
+                        mYouTubeArray);
+
+        ListView youtubeListView = (ListView) rootView.findViewById(R.id.listview_youtube);
+        youtubeListView.setAdapter(mYouTubeAdapter);
+        setListViewHeightBasedOnChildren(youtubeListView);
+
+
+
+
+        youtubeListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
+                //String locationSetting = Utility.getPreferredLocation(getActivity());
+                //Intent intent = new Intent(getActivity(), DetailActivity.class)
+                //        .setData(WeatherContract.WeatherEntry.buildWeatherLocationWithDate(
+                //                locationSetting, cursor.getLong(COL_WEATHER_DATE)
+                //        ));
+
+                String link = mYouTubeAdapter.getItem(position);
+
+                //Toast.makeText(getActivity(), link, Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(link)));
+            }
+        });
+
+
+        Button fav = (Button) rootView.findViewById(R.id.favorite_button);
+        fav.setOnClickListener(new OnClickListener(){
+            @Override
+            public void onClick(View v){
+                SharedFavoritePreferences sharedFavoritePreferencess = new SharedFavoritePreferences();
+                sharedFavoritePreferencess.addFavorite(getContext(), mMovieId);
+              }
+        });
 
         return rootView;
     }
@@ -116,9 +230,33 @@ public class DetailActivityFragment extends Fragment {
     private Intent createShareMovieIntent() {
         Intent shareIntent = new Intent(Intent.ACTION_SEND);
         shareIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
-        shareIntent.setType("text/plain");
+        //shareIntent.setType("text/plain");
+        shareIntent.setType("text/html");
         shareIntent.putExtra(Intent.EXTRA_TEXT,
                 "I like the movie" + mOrgTitle + "!" + MOVIE_SHARE_HASHTAG);
         return shareIntent;
     }
+
+    public static void setListViewHeightBasedOnChildren(ListView listView) {
+        ListAdapter listAdapter = listView.getAdapter();
+        if (listAdapter == null) {
+            // pre-condition
+            return;
+        }
+
+        int totalHeight = 0;
+        for (int i = 0; i < listAdapter.getCount(); i++) {
+            View listItem = listAdapter.getView(i, null, listView);
+            listItem.measure(0, 0);
+            totalHeight += listItem.getMeasuredHeight();
+        }
+
+        ViewGroup.LayoutParams params = listView.getLayoutParams();
+        params.height = totalHeight + (listView.getDividerHeight() * (listAdapter.getCount() - 1));
+        listView.setLayoutParams(params);
+        listView.requestLayout();
+    }
+
+
+
 }
