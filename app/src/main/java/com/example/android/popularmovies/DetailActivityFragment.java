@@ -36,12 +36,14 @@ import java.util.Arrays;
 public class DetailActivityFragment extends Fragment {
 
 
-    SharedFavoritePreferences sharedFavoritePreferences;
+    SharedFavoritePreferences sharedFavoritePreferences  = new SharedFavoritePreferences();
 
     private ArrayAdapter<String> mReviewAdapter;
     ArrayList<String> mReviewArray;
     private ArrayAdapter<String> mYouTubeAdapter;
     ArrayList<String> mYouTubeArray;
+    ArrayList<String> mFavoriteList;
+    boolean mLike;
 
 
     /*
@@ -194,12 +196,34 @@ public class DetailActivityFragment extends Fragment {
         });
 
 
-        Button fav = (Button) rootView.findViewById(R.id.favorite_button);
+        mFavoriteList = new ArrayList<String>(Arrays.asList(sharedFavoritePreferences.getFavorites(getContext()).split("\\s*,\\s*")));
+
+        final Button fav = (Button) rootView.findViewById(R.id.favorite_button);
+
+        if (mFavoriteList.contains(mMovieId)){
+            fav.setText("Unlike");
+            mLike = true;
+        } else {
+            fav.setText("Like");
+            mLike = false;
+        }
+
         fav.setOnClickListener(new OnClickListener(){
             @Override
             public void onClick(View v){
-                SharedFavoritePreferences sharedFavoritePreferencess = new SharedFavoritePreferences();
-                sharedFavoritePreferencess.addFavorite(getContext(), mMovieId);
+
+                if (mLike == false){
+                    SharedFavoritePreferences sharedFavoritePreferencess = new SharedFavoritePreferences();
+                    sharedFavoritePreferencess.addFavorite(getContext(), mMovieId);
+                    mLike = true;
+                    fav.setText("Unlike");
+                } else {
+                    SharedFavoritePreferences sharedFavoritePreferencess = new SharedFavoritePreferences();
+                    sharedFavoritePreferencess.removeFavorite(getContext(), mMovieId);
+                    mLike = false;
+                    fav.setText("Like");
+                }
+
               }
         });
 
