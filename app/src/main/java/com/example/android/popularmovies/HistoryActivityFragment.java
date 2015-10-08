@@ -1,5 +1,6 @@
 package com.example.android.popularmovies;
 
+import android.content.Intent;
 import android.database.Cursor;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
@@ -10,6 +11,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.GridView;
 
 import com.example.android.popularmovies.data.MovieContract;
@@ -94,6 +96,23 @@ public class HistoryActivityFragment extends Fragment implements LoaderManager.L
 
         GridView gridView = (GridView) rootView.findViewById(R.id.grid_view_history_movie);
         gridView.setAdapter(mImageMovieAdapter);
+
+        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l){
+                // CursorAdapter returns a cursor at the correct position for getItem(), or null
+                // if it cannot seek to that position.
+//                Cursor cursor = (Cursor) adapterView.getItemAtPosition(position);
+//                if (cursor != null) {
+//                    Intent intent = new Intent(getActivity(), HistFavDetailActivity.class)
+//                            .setData(MovieContract.UserEntry.buildUserMovie(Long.toString(cursor.getLong(COL_MOVIE_ID)))
+//                            );
+//                    startActivity(intent);
+//                }
+                startActivity(new Intent(getActivity(), DetailForHistFavActivity.class));
+            }
+        });
         return rootView;
     }
 
