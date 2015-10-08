@@ -51,6 +51,12 @@
     <string name="action_share">Share</string>
     <string name="title_activity_favorite">FavoriteActivity</string>
     <string name="title_activity_history">HistoryActivity</string>
+    <string name="title_activity_fav_hist_detail">FavHistDetailActivity</string>
+
+<!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_hist_fav_detail">HistFavDetailActivity</string>
+    <string name="title_activity_detail_for_hist_fav">DetailForHistFavActivity</string>
 
 
 
