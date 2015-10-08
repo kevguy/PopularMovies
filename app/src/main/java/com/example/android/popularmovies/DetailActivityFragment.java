@@ -197,10 +197,16 @@ public class DetailActivityFragment extends Fragment {
             }
         });
 
+        if (sharedFavoritePreferences.getFavorites(getContext()) != null) {
 
-        mFavoriteList = new ArrayList<String>(Arrays.asList(sharedFavoritePreferences.getFavorites(getContext()).split("\\s*,\\s*")));
+            mFavoriteList = new ArrayList<String>(Arrays.asList(sharedFavoritePreferences.getFavorites(getContext()).split("\\s*,\\s*")));
+        } else {
+            mFavoriteList = new ArrayList<String>();
+        }
+
 
         final Button fav = (Button) rootView.findViewById(R.id.favorite_button);
+
 
         if (mFavoriteList.contains(mMovieId)){
             fav.setText("Unlike");
