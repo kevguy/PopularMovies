@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,11 +22,14 @@ import com.example.android.popularmovies.data.MovieContract;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * A placeholder fragment containing a simple view.
  */
 public class FavoriteActivityFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>{
+
+    private static final String LOG_TAG = FavoriteActivityFragment.class.getSimpleName();
 
     private static final int MOVIE_LOADER = 0;
 
@@ -82,15 +86,6 @@ public class FavoriteActivityFragment extends Fragment implements LoaderManager.
 
         mImageMovieAdapter = new FavMovieCursorAdapter(getActivity(), null, 0);
 
-//        mImageMovieAdapter = new NetworkImageAdapter(getActivity(),
-//                R.id.fav_image_item_movie_imageview,
-//                moviePosterPath);
-
-        //mImageMovieAdapter.mSuckDickMovieDataArray = new ArrayList<MovieData>();
-        //mMovieDataArray = new ArrayList<MovieData>();
-
-//        GridView gridView = (GridView) rootView.findViewById(R.id.grid_view_favorite_movie);
-//        gridView.setAdapter(mImageMovieAdapter);
 
         GridView gridView = (GridView) rootView.findViewById(R.id.grid_view_favorite_movie);
         gridView.setAdapter(mImageMovieAdapter);
@@ -124,12 +119,56 @@ public class FavoriteActivityFragment extends Fragment implements LoaderManager.
         //Uri weatherForLocationUri = MovieContract.UserEntry.buildUserMovieWithFavorite(
         //        sortSetting);
 
-        return new CursorLoader(getActivity(),
-                MovieContract.UserEntry.CONTENT_URI,
-                MOVIE_COLUMNS,
-                null,
-                null,
-                sortOrder);
+//        return new CursorLoader(getActivity(),
+//                MovieContract.UserEntry.CONTENT_URI,
+//                MOVIE_COLUMNS,
+//                null,
+//                null,
+//                sortOrder);
+
+        SharedFavoritePreferences sharedFavoritePreferences = new SharedFavoritePreferences();
+        String output = sharedFavoritePreferences.getFavorites(getContext());
+        if (output != null && (!(output.equals("")))) {
+            Log.v(LOG_TAG, "output is " + output);
+
+            ArrayList<String> FavoriteList = new ArrayList<String>(Arrays.asList(output.split("\\s*,\\s*")));
+            String selection = "";
+            ArrayList<String> argument = new ArrayList<String>();
+
+            for (String item : FavoriteList) {
+                if (!(item.equals(""))) {
+                    selection += MovieContract.MovieEntry.COLUMN_MOVIE_ID + " = ? OR ";
+                    argument.add(item);
+                }
+            }
+            selection = selection.substring(0, selection.length() - 3);
+            Log.v(LOG_TAG, selection);
+            String[] argumentArray = new String[argument.size()];
+            argument.toArray(argumentArray);
+
+
+//        return new CursorLoader(getActivity(),
+//                MovieContract.UserEntry.CONTENT_URI,
+//                MOVIE_COLUMNS,
+//                MovieContract.MovieEntry.COLUMN_MOVIE_ID + " = ?",
+//                new String[]{"24428"},
+//                sortOrder);
+
+            return new CursorLoader(getActivity(),
+                    MovieContract.UserEntry.CONTENT_URI,
+                    MOVIE_COLUMNS,
+                    selection,
+                    argumentArray,
+                    sortOrder);
+        }
+        else {
+            return new CursorLoader(getActivity(),
+                    MovieContract.UserEntry.CONTENT_URI,
+                    MOVIE_COLUMNS,
+                    MovieContract.MovieEntry.COLUMN_MOVIE_ID + " = ?",
+                    new String[]{"-1"},
+                    sortOrder);
+        }
     }
 
     @Override

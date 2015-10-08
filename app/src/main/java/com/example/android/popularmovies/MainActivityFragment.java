@@ -85,39 +85,7 @@ public class MainActivityFragment extends Fragment {
 
         if (id == R.id.action_favorites){
             Log.d(LOG_TAG, "SoSad");
-            item.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-                @Override
-                public boolean onMenuItemClick(MenuItem item) {
-                    ArrayList<MovieDataPar> movieDetailArray = new ArrayList<MovieDataPar>();
-                    for (int i = 0; i < mImageMovieAdapter.mSuckDickMovieDataArray.size(); ++i) {
-                        MovieDataPar movieDetailPar = new MovieDataPar();
-                        movieDetailPar.setAdult(mImageMovieAdapter.mSuckDickMovieDataArray.get(i).getAdult());
-                        movieDetailPar.setBackdropPath(mImageMovieAdapter.mSuckDickMovieDataArray.get(i).getBackdropPath());
-                        movieDetailPar.setMovieId(mImageMovieAdapter.mSuckDickMovieDataArray.get(i).getId());
-                        movieDetailPar.setOriginalLanguage(mImageMovieAdapter.mSuckDickMovieDataArray.get(i).getOriginalLanguage());
-                        movieDetailPar.setOriginalTitle(mImageMovieAdapter.mSuckDickMovieDataArray.get(i).getOriginalTitle());
-                        movieDetailPar.setOverview(mImageMovieAdapter.mSuckDickMovieDataArray.get(i).getOverview());
-                        movieDetailPar.setReleaseDate(mImageMovieAdapter.mSuckDickMovieDataArray.get(i).getReleaseDate());
-                        movieDetailPar.setPosterPath(mImageMovieAdapter.mSuckDickMovieDataArray.get(i).getPosterPath());
-                        movieDetailPar.setPopularity(mImageMovieAdapter.mSuckDickMovieDataArray.get(i).getPopularity());
-                        movieDetailPar.setTitle(mImageMovieAdapter.mSuckDickMovieDataArray.get(i).getTitle());
-                        movieDetailPar.setVideo(mImageMovieAdapter.mSuckDickMovieDataArray.get(i).getVideo());
-                        movieDetailPar.setVoteAvg(mImageMovieAdapter.mSuckDickMovieDataArray.get(i).getVoteAvg());
-                        movieDetailPar.setVoteCount(mImageMovieAdapter.mSuckDickMovieDataArray.get(i).getVoteCount());
-                        movieDetailPar.setYouTube(mImageMovieAdapter.mSuckDickMovieDataArray.get(i).getYouTube());
-                        movieDetailPar.setReview(mImageMovieAdapter.mSuckDickMovieDataArray.get(i).getReview());
-                        movieDetailArray.add(i, movieDetailPar);
-                    }
-                    Intent intent = new Intent(getActivity(), FavoriteActivity.class)
-                            .putParcelableArrayListExtra(Intent.EXTRA_PROCESS_TEXT, movieDetailArray);
-                    startActivity(intent);
-//
-                    //startActivity(new Intent(getActivity(), FavoriteActivity.class));
-                    return true;
-                }
-            });
-
-            //startActivity(new Intent(getActivity(), FavoriteActivity.class));
+            startActivity(new Intent(getActivity(), FavoriteActivity.class));
             return true;
         }
         return super.onOptionsItemSelected(item);

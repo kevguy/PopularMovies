@@ -124,56 +124,12 @@ public class HistoryActivityFragment extends Fragment implements LoaderManager.L
         //Uri weatherForLocationUri = MovieContract.UserEntry.buildUserMovieWithFavorite(
         //        sortSetting);
 
-//        return new CursorLoader(getActivity(),
-//                MovieContract.UserEntry.CONTENT_URI,
-//                MOVIE_COLUMNS,
-//                null,
-//                null,
-//                sortOrder);
-
-        SharedFavoritePreferences sharedFavoritePreferences = new SharedFavoritePreferences();
-        String output = sharedFavoritePreferences.getFavorites(getContext());
-        if (output != null && (!(output.equals("")))) {
-            Log.v(LOG_TAG, "output is " + output);
-
-            ArrayList<String> FavoriteList = new ArrayList<String>(Arrays.asList(output.split("\\s*,\\s*")));
-            String selection = "";
-            ArrayList<String> argument = new ArrayList<String>();
-
-            for (String item : FavoriteList) {
-                if (!(item.equals(""))) {
-                    selection += MovieContract.MovieEntry.COLUMN_MOVIE_ID + " = ? OR ";
-                    argument.add(item);
-                }
-            }
-            selection = selection.substring(0, selection.length() - 3);
-            Log.v(LOG_TAG, selection);
-            String[] argumentArray = new String[argument.size()];
-            argument.toArray(argumentArray);
-
-
-//        return new CursorLoader(getActivity(),
-//                MovieContract.UserEntry.CONTENT_URI,
-//                MOVIE_COLUMNS,
-//                MovieContract.MovieEntry.COLUMN_MOVIE_ID + " = ?",
-//                new String[]{"24428"},
-//                sortOrder);
-
-            return new CursorLoader(getActivity(),
-                    MovieContract.UserEntry.CONTENT_URI,
-                    MOVIE_COLUMNS,
-                    selection,
-                    argumentArray,
-                    sortOrder);
-        }
-        else {
-            return new CursorLoader(getActivity(),
+        return new CursorLoader(getActivity(),
                 MovieContract.UserEntry.CONTENT_URI,
                 MOVIE_COLUMNS,
-                MovieContract.MovieEntry.COLUMN_MOVIE_ID + " = ?",
-                new String[]{"-1"},
+                null,
+                null,
                 sortOrder);
-        }
     }
 
     @Override
