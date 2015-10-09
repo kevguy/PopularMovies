@@ -2,6 +2,7 @@ package com.example.android.popularmovies;
 
 import android.content.Intent;
 import android.database.Cursor;
+import android.net.Uri;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.v4.content.Loader;
@@ -15,8 +16,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.support.v7.widget.ShareActionProvider;
 import android.support.v4.content.CursorLoader;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.ListAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.support.v4.app.LoaderManager.LoaderCallbacks;
 
@@ -85,6 +89,7 @@ public class DetailForHistFavActivityFragment extends Fragment implements Loader
     private String mRelDate;
     private String mVoteAvg;
     private String mImagePath;
+    private String mReviewStr;
 
     private ArrayAdapter<String> mReviewAdapter;
     ArrayList<String> mReviewArray = new ArrayList<String>();
@@ -126,10 +131,10 @@ public class DetailForHistFavActivityFragment extends Fragment implements Loader
         shareIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
         //shareIntent.setType("text/plain");
         shareIntent.setType("text/html");
-        shareIntent.putExtra(Intent.EXTRA_TEXT,
-                "I like the movie !");
         //shareIntent.putExtra(Intent.EXTRA_TEXT,
-                //mYouTubeLink);
+        //        "I like the movie !");
+        shareIntent.putExtra(Intent.EXTRA_TEXT,
+                mYouTubeLink);
         return shareIntent;
     }
 
@@ -173,9 +178,9 @@ public class DetailForHistFavActivityFragment extends Fragment implements Loader
         mOverviewStr = data.getString(COL_OVERVIEW);
         mRelDate = data.getString(COL_REL_DATE);
         mVoteAvg = data.getString(COL_VOTE_AVG);
-        mImagePath = data.getString(COL_BACKDROP_PATH);
+        mImagePath = data.getString(COL_POSTER_PATH);
         String youStr = data.getString(COL_YOUTUBE);
-        String reviewSStr = data.getString(COL_REVIEW);
+        mReviewStr = data.getString(COL_REVIEW);
 
 
         Log.v(LOG_TAG, mMovieId);
@@ -187,7 +192,7 @@ public class DetailForHistFavActivityFragment extends Fragment implements Loader
         Log.v(LOG_TAG, mVoteAvg);
         Log.v(LOG_TAG, mImagePath);
         Log.v(LOG_TAG, youStr);
-        Log.v(LOG_TAG, reviewSStr);
+        Log.v(LOG_TAG, mReviewStr);
 
 //        mImagePath = movieDetailArray.get(11);
 //        Picasso.with(getActivity())
@@ -200,23 +205,23 @@ public class DetailForHistFavActivityFragment extends Fragment implements Loader
         mYouTubeLink = mYouTubeArray.get(0);
 
         String reviewStr = "";
-        if (!(reviewSStr.equals("Nothing"))) {
-            while (reviewSStr != null) {
-                if (reviewSStr.indexOf("<author>") >= 0 && reviewSStr.indexOf("</author>") >= 0
-                        && reviewSStr.indexOf("<content>") >= 0 && reviewSStr.indexOf("</content>") >= 0) {
-                    mReviewArray.add(reviewSStr.substring(reviewSStr.indexOf("<author>") + 8, reviewSStr.indexOf("</author>")) + ": \n\n" +
-                            reviewSStr.substring(reviewSStr.indexOf("<content>") + 9, reviewSStr.indexOf("</content>") - 1));
+        if (!(mReviewStr.equals("Nothing"))) {
+            while (mReviewStr != null) {
+                if (mReviewStr.indexOf("<author>") >= 0 && mReviewStr.indexOf("</author>") >= 0
+                        && mReviewStr.indexOf("<content>") >= 0 && mReviewStr.indexOf("</content>") >= 0) {
+                    mReviewArray.add(mReviewStr.substring(mReviewStr.indexOf("<author>") + 8, mReviewStr.indexOf("</author>")) + ": \n\n" +
+                            mReviewStr.substring(mReviewStr.indexOf("<content>") + 9, mReviewStr.indexOf("</content>") - 1));
 
-                    reviewStr = reviewStr + "\n\n\n\n\"" + reviewSStr.substring(reviewSStr.indexOf("<content>") + 9, reviewSStr.indexOf("</content>") - 1) +
+                    reviewStr = reviewStr + "\n\n\n\n\"" + mReviewStr.substring(mReviewStr.indexOf("<content>") + 9, mReviewStr.indexOf("</content>") - 1) +
                             "\"\n- by " +
-                            reviewSStr.substring(reviewSStr.indexOf("<author>") + 8, reviewSStr.indexOf("</author>"));
+                            mReviewStr.substring(mReviewStr.indexOf("<author>") + 8, mReviewStr.indexOf("</author>"));
 
-                    if (reviewSStr.indexOf("</content>") + 10 < reviewSStr.length()) {
-                        reviewSStr = reviewSStr.substring(reviewSStr.indexOf("</content>") + 10, reviewSStr.length() - 1);
+                    if (mReviewStr.indexOf("</content>") + 10 < mReviewStr.length()) {
+                        mReviewStr = mReviewStr.substring(mReviewStr.indexOf("</content>") + 10, mReviewStr.length() - 1);
                     } else
-                        reviewSStr = null;
+                        mReviewStr = null;
                 } else
-                    reviewSStr = null;
+                    mReviewStr = null;
 
 
             }
@@ -229,17 +234,63 @@ public class DetailForHistFavActivityFragment extends Fragment implements Loader
             Log.v(LOG_TAG, "youTube " + youtube);
         }
 
+        ((TextView) getView().findViewById(R.id.fav_hist_detail_overview))
+                .setText(mOverviewStr);
+        ((TextView) getView().findViewById(R.id.fav_hist_detail_adult))
+                .setText("Adult: " + mAdult);
+        ((TextView) getView().findViewById(R.id.fav_hist_detail_org_lang))
+                .setText("Language: " + mOrgLang);
+        ((TextView) getView().findViewById(R.id.fav_hist_detail_org_title))
+                .setText(mOrgTitle);
+        ((TextView) getView().findViewById(R.id.fav_hist_detail_rel_date))
+                .setText(mRelDate);
+        ((TextView) getView().findViewById(R.id.fav_hist_detail_user_rating))
+                .setText("Average rating: " + mVoteAvg);
+        Picasso.with(getActivity())
+                .load("http://image.tmdb.org/t/p/w185/" + mImagePath)
+                .into((ImageView) getView().findViewById(R.id.fav_hist_detail_image));
+
+        TextView tv = (TextView) getView().findViewById(R.id.fav_hist_review_textview);
+        if (reviewStr.equals("")) {
+            reviewStr = "No reviews available.";
+        }
+        tv.setText(reviewStr);
+
+        mYouTubeAdapter =
+                new ArrayAdapter<String>(
+                        getActivity(),
+                        R.layout.video_item_movie,
+                        R.id.video_item_movie_textview,
+                        mYouTubeArray);
+
+        ListView youtubeListView = (ListView) getView().findViewById(R.id.fav_hist_listview_youtube);
+        youtubeListView.setAdapter(mYouTubeAdapter);
+        setListViewHeightBasedOnChildren(youtubeListView);
+
+        youtubeListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
+                //String locationSetting = Utility.getPreferredLocation(getActivity());
+                //Intent intent = new Intent(getActivity(), DetailActivity.class)
+                //        .setData(WeatherContract.WeatherEntry.buildWeatherLocationWithDate(
+                //                locationSetting, cursor.getLong(COL_WEATHER_DATE)
+                //        ));
+
+                String link = mYouTubeAdapter.getItem(position);
+
+                //Toast.makeText(getActivity(), link, Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(link)));
+            }
+        });
 
 
 
 
 
 
-
-
-
-        TextView detailTextView = (TextView)getView().findViewById(R.id.abcd);
-        detailTextView.setText(mMovieId + " " + dataString);
+        //TextView detailTextView = (TextView)getView().findViewById(R.id.abcd);
+        //detailTextView.setText(mMovieId + " " + dataString);
 
         // If onCreateOptionsMenu has already happened, we need to update the share intent now.
         if (mShareActionProvider != null) {
@@ -249,4 +300,24 @@ public class DetailForHistFavActivityFragment extends Fragment implements Loader
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) { }
+
+    public static void setListViewHeightBasedOnChildren(ListView listView) {
+        ListAdapter listAdapter = listView.getAdapter();
+        if (listAdapter == null) {
+            // pre-condition
+            return;
+        }
+
+        int totalHeight = 0;
+        for (int i = 0; i < listAdapter.getCount(); i++) {
+            View listItem = listAdapter.getView(i, null, listView);
+            listItem.measure(0, 0);
+            totalHeight += listItem.getMeasuredHeight();
+        }
+
+        ViewGroup.LayoutParams params = listView.getLayoutParams();
+        params.height = totalHeight + (listView.getDividerHeight() * (listAdapter.getCount() - 1));
+        listView.setLayoutParams(params);
+        listView.requestLayout();
+    }
 }
