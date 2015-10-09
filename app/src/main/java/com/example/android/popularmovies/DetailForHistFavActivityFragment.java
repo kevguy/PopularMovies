@@ -15,10 +15,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.support.v7.widget.ShareActionProvider;
 import android.support.v4.content.CursorLoader;
+import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.support.v4.app.LoaderManager.LoaderCallbacks;
 
 import com.example.android.popularmovies.data.MovieContract;
+import com.squareup.picasso.Picasso;
+
+import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * A placeholder fragment containing a simple view.
@@ -32,8 +38,6 @@ public class DetailForHistFavActivityFragment extends Fragment implements Loader
     private ShareActionProvider mShareActionProvider;
 
     HistMovieCursorAdapter mImageMovieAdapter;
-
-    private String mMovieId;
 
     private static final String[] MOVIE_COLUMNS = {
             MovieContract.UserEntry.TABLE_NAME + "." + MovieContract.UserEntry._ID,
@@ -73,6 +77,21 @@ public class DetailForHistFavActivityFragment extends Fragment implements Loader
     static final int COL_ORG_TITLE = 15;
     static final int COL_OVERVIEW = 16;
 
+    private String mMovieId;
+    private String mAdult;
+    private String mOrgLang;
+    private String mOrgTitle;
+    private String mOverviewStr;
+    private String mRelDate;
+    private String mVoteAvg;
+    private String mImagePath;
+
+    private ArrayAdapter<String> mReviewAdapter;
+    ArrayList<String> mReviewArray = new ArrayList<String>();
+    private ArrayAdapter<String> mYouTubeAdapter;
+    ArrayList<String> mYouTubeArray = new ArrayList<String>();
+    String mYouTubeLink = "Nothing";
+
     public DetailForHistFavActivityFragment() {
         setHasOptionsMenu(true);
     }
@@ -107,11 +126,10 @@ public class DetailForHistFavActivityFragment extends Fragment implements Loader
         shareIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
         //shareIntent.setType("text/plain");
         shareIntent.setType("text/html");
-//        shareIntent.putExtra(Intent.EXTRA_TEXT,
-//                "I like the movie" + mOrgTitle + "!" + MOVIE_SHARE_HASHTAG);
         shareIntent.putExtra(Intent.EXTRA_TEXT,
+                "I like the movie !");
+        //shareIntent.putExtra(Intent.EXTRA_TEXT,
                 //mYouTubeLink);
-                mMovieId);
         return shareIntent;
     }
 
@@ -147,6 +165,77 @@ public class DetailForHistFavActivityFragment extends Fragment implements Loader
         if (!data.moveToFirst()) { return; }
 
         String dataString = data.getString(COL_ORG_TITLE);
+
+        mMovieId = data.getString(COL_MOVIE_ID);
+        mAdult = data.getString(COL_ADULT);
+        mOrgLang = data.getString(COL_ORG_LANG);
+        mOrgTitle = data.getString(COL_ORG_TITLE);
+        mOverviewStr = data.getString(COL_OVERVIEW);
+        mRelDate = data.getString(COL_REL_DATE);
+        mVoteAvg = data.getString(COL_VOTE_AVG);
+        mImagePath = data.getString(COL_BACKDROP_PATH);
+        String youStr = data.getString(COL_YOUTUBE);
+        String reviewSStr = data.getString(COL_REVIEW);
+
+
+        Log.v(LOG_TAG, mMovieId);
+        Log.v(LOG_TAG, mAdult);
+        Log.v(LOG_TAG, mOrgLang);
+        Log.v(LOG_TAG, mOrgTitle);
+        Log.v(LOG_TAG, mOverviewStr);
+        Log.v(LOG_TAG, mRelDate);
+        Log.v(LOG_TAG, mVoteAvg);
+        Log.v(LOG_TAG, mImagePath);
+        Log.v(LOG_TAG, youStr);
+        Log.v(LOG_TAG, reviewSStr);
+
+//        mImagePath = movieDetailArray.get(11);
+//        Picasso.with(getActivity())
+//                .load("http://image.tmdb.org/t/p/w185/" + mImagePath)
+//                .into((ImageView) rootView.findViewById(R.id.detail_image));
+//        mMovieId = movieDetailArray.get(14);
+
+        //mReviewArray.add(0, movieDetailArray.get(12));
+        mYouTubeArray = new ArrayList<String>(Arrays.asList(youStr.split("\\s*,\\s*")));
+        mYouTubeLink = mYouTubeArray.get(0);
+
+        String reviewStr = "";
+        if (!(reviewSStr.equals("Nothing"))) {
+            while (reviewSStr != null) {
+                if (reviewSStr.indexOf("<author>") >= 0 && reviewSStr.indexOf("</author>") >= 0
+                        && reviewSStr.indexOf("<content>") >= 0 && reviewSStr.indexOf("</content>") >= 0) {
+                    mReviewArray.add(reviewSStr.substring(reviewSStr.indexOf("<author>") + 8, reviewSStr.indexOf("</author>")) + ": \n\n" +
+                            reviewSStr.substring(reviewSStr.indexOf("<content>") + 9, reviewSStr.indexOf("</content>") - 1));
+
+                    reviewStr = reviewStr + "\n\n\n\n\"" + reviewSStr.substring(reviewSStr.indexOf("<content>") + 9, reviewSStr.indexOf("</content>") - 1) +
+                            "\"\n- by " +
+                            reviewSStr.substring(reviewSStr.indexOf("<author>") + 8, reviewSStr.indexOf("</author>"));
+
+                    if (reviewSStr.indexOf("</content>") + 10 < reviewSStr.length()) {
+                        reviewSStr = reviewSStr.substring(reviewSStr.indexOf("</content>") + 10, reviewSStr.length() - 1);
+                    } else
+                        reviewSStr = null;
+                } else
+                    reviewSStr = null;
+
+
+            }
+            for (String revieww: mReviewArray){
+                Log.v(LOG_TAG, "review is" + revieww);
+            }
+        }
+
+        for (String youtube: mYouTubeArray){
+            Log.v(LOG_TAG, "youTube " + youtube);
+        }
+
+
+
+
+
+
+
+
 
 
         TextView detailTextView = (TextView)getView().findViewById(R.id.abcd);
