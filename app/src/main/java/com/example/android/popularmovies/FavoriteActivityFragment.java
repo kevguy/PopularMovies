@@ -89,6 +89,26 @@ public class FavoriteActivityFragment extends Fragment implements LoaderManager.
 
         GridView gridView = (GridView) rootView.findViewById(R.id.grid_view_favorite_movie);
         gridView.setAdapter(mImageMovieAdapter);
+
+
+        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
+                // CursorAdapter returns a cursor at the correct position for getItem(), or null
+                // if it cannot seek to that position.
+                Cursor cursor = (Cursor) adapterView.getItemAtPosition(position);
+                if (cursor != null) {
+                    Intent intent = new Intent(getActivity(), DetailForHistFavActivity.class)
+                            .setData(MovieContract.UserEntry.buildUserMovie(Long.toString(cursor.getLong(COL_MOVIE_ID)))
+                            );
+                    startActivity(intent);
+                }
+                //startActivity(new Intent(getActivity(), DetailForHistFavActivity.class));
+            }
+        });
+
+
         return rootView;
     }
 

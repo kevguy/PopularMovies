@@ -147,7 +147,9 @@ public class DetailActivityFragment extends Fragment {
 
                 }
             }
-
+            if (reviewStr.equals("")) {
+                reviewStr = "No reviews available.";
+            }
             tv.setText(reviewStr);
 
 
