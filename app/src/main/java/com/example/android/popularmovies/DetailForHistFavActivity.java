@@ -28,6 +28,12 @@ public class DetailForHistFavActivity extends AppCompatActivity {
 //            }
 //        });
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        //if (savedInstanceState == null){
+        //    getSupportFragmentManager().beginTransaction()
+        //            .add(R.id.history_detail_container, new DetailForHistFavActivityFragment())
+        //            .commit();
+       // }
     }
 
     @Override
