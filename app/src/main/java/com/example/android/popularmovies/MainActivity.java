@@ -2,12 +2,15 @@ package com.example.android.popularmovies;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
-public class MainActivity extends AppCompatActivity {
+import java.util.ArrayList;
+
+public class MainActivity extends AppCompatActivity implements MainActivityFragment.Callback{
     private boolean mTwoPane;
     private static final String DETAILFRAGMENT_TAG = "DFTAG";
 
@@ -56,4 +59,26 @@ public class MainActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
+    @Override
+    public void onItemSelected(ArrayList<String> abc) {
+        if (mTwoPane) {
+            // In two-pane mode, show the detail view in this activity by
+            // adding or replacing the detail fragment using a
+            // fragment transaction.
+            Bundle args = new Bundle();
+            args.putStringArrayList(DetailActivityFragment.DETAIL_URI, abc);
+
+            DetailActivityFragment fragment = new DetailActivityFragment();
+            fragment.setArguments(args);
+
+            getSupportFragmentManager().beginTransaction()
+                .replace(R.id.weather_detail_container, fragment, DETAILFRAGMENT_TAG)
+                .commit();
+            } else {
+                Intent intent = new Intent(this, DetailActivity.class)
+                    .putStringArrayListExtra(Intent.EXTRA_TEXT, abc);
+            startActivity(intent);
+            }
+        }
 }

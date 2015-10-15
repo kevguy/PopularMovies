@@ -49,6 +49,19 @@ public class MainActivityFragment extends Fragment {
     NetworkImageAdapter mImageMovieAdapter;
     public ArrayList<MovieData> mMovieDataArray;
 
+    /**
+     * A callback interface that all activities containing this fragment must
+     * implement. This mechanism allows activities to be notified of item
+     * selections.
+     */
+    public interface Callback {
+        /**
+         * DetailFragmentCallback for when an item has been selected.
+         */
+        public void onItemSelected(ArrayList<String> abc);
+    }
+
+
     public MainActivityFragment() {
     }
 
@@ -132,9 +145,11 @@ public class MainActivityFragment extends Fragment {
                 movieDetailArray.add(14, Long.toString(mImageMovieAdapter.mSuckDickMovieDataArray.get(position).getId()));
 
                 Toast.makeText(getActivity(), forecast, Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(getActivity(), DetailActivity.class)
-                        .putStringArrayListExtra(Intent.EXTRA_TEXT, movieDetailArray);
-                startActivity(intent);
+                //Intent intent = new Intent(getActivity(), DetailActivity.class)
+                //        .putStringArrayListExtra(Intent.EXTRA_TEXT, movieDetailArray);
+                //startActivity(intent);
+                ((Callback) getActivity())
+                        .onItemSelected(movieDetailArray);
             }
         });
 
