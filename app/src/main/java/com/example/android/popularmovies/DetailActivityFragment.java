@@ -38,6 +38,8 @@ public class DetailActivityFragment extends Fragment {
 
     SharedFavoritePreferences sharedFavoritePreferences  = new SharedFavoritePreferences();
 
+    static final String DETAIL_URI = "URI";
+    static public ArrayList<String> mMovieDetailArray = new ArrayList<String>();
     private ArrayAdapter<String> mReviewAdapter;
     ArrayList<String> mReviewArray;
     private ArrayAdapter<String> mYouTubeAdapter;
@@ -85,6 +87,69 @@ public class DetailActivityFragment extends Fragment {
         ArrayList<String> mReviewArray = new ArrayList<String>();
         ArrayList<String> mYouTubeArray = new ArrayList<String>();
 
+        Bundle arguments = getArguments();
+        if (arguments != null) {
+            mMovieDetailArray = arguments.getStringArrayList(DetailActivityFragment.DETAIL_URI);
+            mOverviewStr = mMovieDetailArray.get(4);
+            ((TextView) rootView.findViewById(R.id.detail_overview))
+                    .setText(mOverviewStr);
+            mAdult = mMovieDetailArray.get(0);
+            ((TextView) rootView.findViewById(R.id.detail_adult))
+                    .setText("Adult: " + mAdult);
+            mOrgLang = mMovieDetailArray.get(2);
+            ((TextView) rootView.findViewById(R.id.detail_org_lang))
+                    .setText("Language: " + mOrgLang);
+            mOrgTitle = mMovieDetailArray.get(3);
+            ((TextView) rootView.findViewById(R.id.detail_org_title))
+                    .setText(mOrgTitle);
+            mRelDate = mMovieDetailArray.get(5);
+            ((TextView) rootView.findViewById(R.id.detail_rel_date))
+                    .setText(mRelDate);
+            mVoteAvg = mMovieDetailArray.get(9);
+            ((TextView) rootView.findViewById(R.id.detail_user_rating))
+                    .setText("Average rating: " + mVoteAvg);
+            mImagePath = mMovieDetailArray.get(11);
+            Picasso.with(getActivity())
+                    .load("http://image.tmdb.org/t/p/w185/" + mImagePath)
+                    .into((ImageView) rootView.findViewById(R.id.detail_image));
+            mMovieId = mMovieDetailArray.get(14);
+
+            //mReviewArray.add(0, movieDetailArray.get(12));
+            mYouTubeArray = new ArrayList<String>(Arrays.asList(mMovieDetailArray.get(13).split("\\s*,\\s*")));
+            mYouTubeLink = mYouTubeArray.get(0);
+            //mYouTubeArray.add(movieDetailArray.get(13));
+
+            String review = mMovieDetailArray.get(12);
+            TextView tv = (TextView) rootView.findViewById(R.id.review_textview);
+
+            String reviewStr = "";
+            if (!(review.equals("Nothing"))) {
+                while (review != null) {
+
+                    if (review.indexOf("<author>") >= 0 && review.indexOf("</author>") >= 0
+                            && review.indexOf("<content>") >= 0 && review.indexOf("</content>") >= 0) {
+                        mReviewArray.add(review.substring(review.indexOf("<author>") + 8, review.indexOf("</author>")) + ": \n\n" +
+                                review.substring(review.indexOf("<content>") + 9, review.indexOf("</content>") - 1));
+
+                        reviewStr = reviewStr + "\n\n\n\n\"" + review.substring(review.indexOf("<content>") + 9, review.indexOf("</content>") - 1) +
+                                "\"\n- by " +
+                                review.substring(review.indexOf("<author>") + 8, review.indexOf("</author>"));
+
+                        if (review.indexOf("</content>") + 10 < review.length()) {
+                            review = review.substring(review.indexOf("</content>") + 10, review.length() - 1);
+                        } else
+                            review = null;
+                    } else
+                        review = null;
+
+
+                }
+            }
+            if (reviewStr.equals("")) {
+                reviewStr = "No reviews available.";
+            }
+            tv.setText(reviewStr);
+        }
 
         // The detail Activity called via intent.  Inspect the intent for forecast data.
         Intent intent = getActivity().getIntent();
