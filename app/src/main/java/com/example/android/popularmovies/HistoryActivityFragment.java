@@ -2,6 +2,7 @@ package com.example.android.popularmovies;
 
 import android.content.Intent;
 import android.database.Cursor;
+import android.net.Uri;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.v4.app.LoaderManager;
@@ -71,6 +72,18 @@ public class HistoryActivityFragment extends Fragment implements LoaderManager.L
     static final int COL_ORG_TITLE = 15;
     static final int COL_OVERVIEW = 16;
 
+    /**
+     * A callback interface that all activities containing this fragment must
+     * implement. This mechanism allows activities to be notified of item
+     * selections.
+     */
+    public interface Callback {
+        /**
+         * DetailFragmentCallback for when an item has been selected.
+         */
+        public void onItemSelected(Uri dateUri);
+    }
+
 
     public HistoryActivityFragment() {
     }
@@ -104,13 +117,14 @@ public class HistoryActivityFragment extends Fragment implements LoaderManager.L
                 // CursorAdapter returns a cursor at the correct position for getItem(), or null
                 // if it cannot seek to that position.
                 Cursor cursor = (Cursor) adapterView.getItemAtPosition(position);
-                if (cursor != null) {
+                /*if (cursor != null) {
                     Intent intent = new Intent(getActivity(), DetailForHistFavActivity.class)
                             .setData(MovieContract.UserEntry.buildUserMovie(Long.toString(cursor.getLong(COL_MOVIE_ID)))
                             );
                     startActivity(intent);
-                }
-                //startActivity(new Intent(getActivity(), DetailForHistFavActivity.class));
+                }*/
+                ((Callback) getActivity())
+                        .onItemSelected(MovieContract.UserEntry.buildUserMovie(Long.toString(cursor.getLong(COL_MOVIE_ID))));
             }
         });
         return rootView;

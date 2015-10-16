@@ -1,11 +1,13 @@
 package com.example.android.popularmovies;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
-public class HistoryActivity extends AppCompatActivity {
+public class HistoryActivity extends AppCompatActivity implements HistoryActivityFragment.Callback{
 
     private static final String HISTDETAILFRAGMENT_TAG = "HDFTAG";
     private boolean mTwoPane;
@@ -55,4 +57,26 @@ public class HistoryActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
+    @Override
+    public void onItemSelected(Uri contentUri) {
+        if (mTwoPane) {
+            // In two-pane mode, show the detail view in this activity by
+            // adding or replacing the detail fragment using a
+            // fragment transaction.
+            Bundle args = new Bundle();
+            args.putParcelable(DetailForHistFavActivityFragment.MOVIE_URI, contentUri);
+
+            DetailForHistFavActivityFragment fragment = new DetailForHistFavActivityFragment();
+            fragment.setArguments(args);
+
+            getSupportFragmentManager().beginTransaction()
+                .replace(R.id.history_detail_container, fragment, HISTDETAILFRAGMENT_TAG)
+                .commit();
+            } else {
+                Intent intent = new Intent(this, DetailActivity.class)
+                    .setData(contentUri);
+            startActivity(intent);
+            }
+        }
 }
