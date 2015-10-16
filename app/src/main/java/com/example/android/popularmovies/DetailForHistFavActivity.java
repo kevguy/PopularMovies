@@ -34,6 +34,17 @@ public class DetailForHistFavActivity extends AppCompatActivity {
         //            .add(R.id.history_detail_container, new DetailForHistFavActivityFragment())
         //            .commit();
        // }
+        if (savedInstanceState == null) {
+            Bundle arguments = new Bundle();
+            arguments.putParcelable(DetailForHistFavActivityFragment.MOVIE_URI, getIntent().getData());
+
+            DetailForHistFavActivityFragment fragment = new DetailForHistFavActivityFragment();
+            fragment.setArguments(arguments);
+
+            getSupportFragmentManager().beginTransaction()
+                    .add(R.id.favorite_detail_container, fragment)
+                    .commit();
+        }
     }
 
     @Override

@@ -41,6 +41,9 @@ public class DetailForHistFavActivityFragment extends Fragment implements Loader
 
     private ShareActionProvider mShareActionProvider;
 
+    static final String MOVIE_URI = "URI";
+    private Uri mUri;
+
     HistMovieCursorAdapter mImageMovieAdapter;
 
     private static final String[] MOVIE_COLUMNS = {
@@ -104,6 +107,10 @@ public class DetailForHistFavActivityFragment extends Fragment implements Loader
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        Bundle arguments = getArguments();
+            if (arguments != null) {
+            mUri = arguments.getParcelable(DetailForHistFavActivityFragment.MOVIE_URI);
+        }
         return inflater.inflate(R.layout.fragment_detail_for_hist_fav, container, false);
     }
 
@@ -146,7 +153,7 @@ public class DetailForHistFavActivityFragment extends Fragment implements Loader
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        Log.v(LOG_TAG, "In onCreateLoader");
+        /*Log.v(LOG_TAG, "In onCreateLoader");
         Intent intent = getActivity().getIntent();
         if (intent == null || intent.getData() == null) {
             return null;
@@ -161,7 +168,20 @@ public class DetailForHistFavActivityFragment extends Fragment implements Loader
                 null,
                 null,
                 null
-        );
+        );*/
+        if ( null != mUri ) {
+            // Now create and return a CursorLoader that will take care of
+            // creating a Cursor for the data being displayed.
+            return new CursorLoader(
+                    getActivity(),
+                    mUri,
+                    MOVIE_COLUMNS,
+                    null,
+                    null,
+                    null
+                    );
+            }
+        return null;
     }
 
     @Override
