@@ -73,7 +73,7 @@ public class FavoriteActivity extends AppCompatActivity implements FavoriteActiv
                     .replace(R.id.favorite_detail_container, fragment, FAVDETAILFRAGMENT_TAG)
                     .commit();
         } else {
-            Intent intent = new Intent(this, DetailActivity.class)
+            Intent intent = new Intent(this, DetailForHistFavActivity.class)
                     .setData(contentUri);
             startActivity(intent);
         }

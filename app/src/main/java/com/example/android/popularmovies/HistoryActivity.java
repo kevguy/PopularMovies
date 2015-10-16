@@ -74,7 +74,7 @@ public class HistoryActivity extends AppCompatActivity implements HistoryActivit
                 .replace(R.id.history_detail_container, fragment, HISTDETAILFRAGMENT_TAG)
                 .commit();
             } else {
-                Intent intent = new Intent(this, DetailActivity.class)
+                Intent intent = new Intent(this, DetailForHistFavActivity.class)
                     .setData(contentUri);
             startActivity(intent);
             }
