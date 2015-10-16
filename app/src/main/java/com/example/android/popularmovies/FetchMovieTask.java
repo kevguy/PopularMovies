@@ -136,7 +136,7 @@ public class FetchMovieTask extends AsyncTask<String, Void, ArrayList<MovieData>
         try{
             final String SORT_BY_PARAM = "sort_by";
             final String API_KEY_PARAM = "api_key";
-            final String API_KEY = "1f81622504d93fd944c771a94fefecfb";
+            final String API_KEY = "";
 
             // Construct the URL for the query
             Uri.Builder builder = new Uri.Builder();

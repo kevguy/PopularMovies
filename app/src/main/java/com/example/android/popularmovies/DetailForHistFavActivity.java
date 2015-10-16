@@ -16,8 +16,9 @@ public class DetailForHistFavActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail_for_hist_fav);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+
+        //Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        //setSupportActionBar(toolbar);
 
 //        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
 //        fab.setOnClickListener(new View.OnClickListener() {
@@ -27,7 +28,7 @@ public class DetailForHistFavActivity extends AppCompatActivity {
 //                        .setAction("Action", null).show();
 //            }
 //        });
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         //if (savedInstanceState == null){
         //    getSupportFragmentManager().beginTransaction()
@@ -38,16 +39,21 @@ public class DetailForHistFavActivity extends AppCompatActivity {
             Bundle arguments = new Bundle();
             arguments.putParcelable(DetailForHistFavActivityFragment.MOVIE_URI, getIntent().getData());
 
-            DetailForHistFavActivityFragment fragment = new DetailForHistFavActivityFragment();
-            fragment.setArguments(arguments);
+            DetailForHistFavActivityFragment fragment1 = new DetailForHistFavActivityFragment();
+            fragment1.setArguments(arguments);
+
+            DetailForHistFavActivityFragment fragment2 = new DetailForHistFavActivityFragment();
+            fragment2.setArguments(arguments);
+
 
             getSupportFragmentManager().beginTransaction()
-                    .add(R.id.favorite_detail_container, fragment)
+                    .add(R.id.frag_hist_detail, fragment1)
                     .commit();
 
-            getSupportFragmentManager().beginTransaction()
-                    .add(R.id.history_detail_container, fragment)
-                    .commit();
+
+            //getSupportFragmentManager().beginTransaction()
+            //        .add(R.id.history_detail_container, fragment2)
+            //        .commit();
         }
     }
 
