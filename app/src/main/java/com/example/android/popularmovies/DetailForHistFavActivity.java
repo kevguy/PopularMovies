@@ -44,6 +44,10 @@ public class DetailForHistFavActivity extends AppCompatActivity {
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.favorite_detail_container, fragment)
                     .commit();
+
+            getSupportFragmentManager().beginTransaction()
+                    .add(R.id.history_detail_container, fragment)
+                    .commit();
         }
     }
 
