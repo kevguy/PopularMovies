@@ -136,7 +136,7 @@ public class FetchMovieTask extends AsyncTask<String, Void, ArrayList<MovieData>
         try{
             final String SORT_BY_PARAM = "sort_by";
             final String API_KEY_PARAM = "api_key";
-            final String API_KEY = "";
+            final String API_KEY = "1f81622504d93fd944c771a94fefecfb";
 
             // Construct the URL for the query
             Uri.Builder builder = new Uri.Builder();
@@ -724,7 +724,7 @@ public class FetchMovieTask extends AsyncTask<String, Void, ArrayList<MovieData>
             movieDataArray.add(i, movieData);
             movieDataArray.add(movieData);
 
-            Log.v(LOG_TAG, "Adult " + Boolean.toString(movieDataArray.get(i).getAdult()));
+            /*Log.v(LOG_TAG, "Adult " + Boolean.toString(movieDataArray.get(i).getAdult()));
             Log.v(LOG_TAG, "Backdrop path " + movieDataArray.get(i).getBackdropPath());
             for (int j = 0; j < movieDataArray.get(i).getGenreIds().size(); ++j) {
                 Log.v(LOG_TAG, "Genre ID " + movieDataArray.get(i).getGenreIds().get(j));
@@ -739,7 +739,7 @@ public class FetchMovieTask extends AsyncTask<String, Void, ArrayList<MovieData>
             Log.v(LOG_TAG, "Title " + movieDataArray.get(i).getTitle());
             Log.v(LOG_TAG, "Video " + Boolean.toString(movieDataArray.get(i).getVideo()));
             Log.v(LOG_TAG, "Vote Avg " + Double.toString(movieDataArray.get(i).getVoteAvg()));
-            Log.v(LOG_TAG, "Vote Count " + Integer.toString(movieDataArray.get(i).getVoteCount()));
+            Log.v(LOG_TAG, "Vote Count " + Integer.toString(movieDataArray.get(i).getVoteCount()));*/
 
 //            ContentValues movieValues = new ContentValues();
 //
