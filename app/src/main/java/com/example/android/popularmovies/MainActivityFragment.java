@@ -49,6 +49,10 @@ public class MainActivityFragment extends Fragment {
     NetworkImageAdapter mImageMovieAdapter;
     public ArrayList<MovieData> mMovieDataArray;
 
+    private boolean mFirst = false;
+
+    private String mSortOption = "";
+
     /**
      * A callback interface that all activities containing this fragment must
      * implement. This mechanism allows activities to be notified of item
@@ -63,6 +67,7 @@ public class MainActivityFragment extends Fragment {
 
 
     public MainActivityFragment() {
+        mFirst = false;
     }
 
     @Override
@@ -70,6 +75,7 @@ public class MainActivityFragment extends Fragment {
         super.onCreate(savedInstanceState);
         // Add this line in order for this fragment to handle menu events
         setHasOptionsMenu(true);
+        Log.d(LOG_TAG, "onCreate() here");
     }
 
     @Override
@@ -101,6 +107,9 @@ public class MainActivityFragment extends Fragment {
             startActivity(new Intent(getActivity(), FavoriteActivity.class));
             return true;
         }
+
+        Log.d(LOG_TAG, "onOptionsItemSelected() here");
+        mSortOption = "Oh boy";
         return super.onOptionsItemSelected(item);
     }
 
@@ -115,8 +124,50 @@ public class MainActivityFragment extends Fragment {
                 R.id.image_item_movie_imageview,
                 moviePosterPath);
 
+        Log.d(LOG_TAG, "onCreateView() here");
+
         //mImageMovieAdapter.mSuckDickMovieDataArray = new ArrayList<MovieData>();
         //mMovieDataArray = new ArrayList<MovieData>();
+        if (null != savedInstanceState) {
+            ArrayList<MovieDataPar> movieDetailDataPar = new ArrayList<MovieDataPar>();
+            movieDetailDataPar = savedInstanceState.getParcelableArrayList("param");
+            for (int i = 0; i < movieDetailDataPar.size(); ++i) {
+                MovieData movieData = new MovieData();
+                movieData.setAdult(movieDetailDataPar.get(i).getAdult());
+                movieData.setBackdropPath(movieDetailDataPar.get(i).getBackdropPath());
+                movieData.setId(movieDetailDataPar.get(i).getMovieId());
+                movieData.setOriginalLanguage(movieDetailDataPar.get(i).getOriginalLanguage());
+                movieData.setOriginalTitle(movieDetailDataPar.get(i).getOriginalTitle());
+                movieData.setOverview(movieDetailDataPar.get(i).getOverview());
+                movieData.setReleaseDate(movieDetailDataPar.get(i).getReleaseDate());
+                movieData.setPosterPath(movieDetailDataPar.get(i).getPosterPath());
+                movieData.setPopularity(movieDetailDataPar.get(i).getPopularity());
+                movieData.setTitle(movieDetailDataPar.get(i).getTitle());
+                movieData.setVideo(movieDetailDataPar.get(i).getVideo());
+                movieData.setVoteAvg(movieDetailDataPar.get(i).getVoteAvg());
+                movieData.setVoteCount(movieDetailDataPar.get(i).getVoteCount());
+                movieData.setYouTube(movieDetailDataPar.get(i).getYouTube());
+                movieData.setReview(movieDetailDataPar.get(i).getReview());
+                mImageMovieAdapter.mSuckDickMovieDataArray.add(i, movieData);
+                mImageMovieAdapter.add("http://image.tmdb.org/t/p/w185/" + movieDetailDataPar.get(i).getPosterPath());
+
+
+
+               /* mImageMovieAdapter.clear();
+                for (MovieData movieDataItem : result){
+                    mImageMovieAdapter.add("http://image.tmdb.org/t/p/w185/" + movieDataItem.getPosterPath());
+                }
+                mImageMovieAdapter.mSuckDickMovieDataArray = result;
+                mMovieDataArray = result;*/
+
+
+
+
+            }
+        }
+        else {
+            updateRecommendation();
+        }
 
         GridView gridView = (GridView) rootView.findViewById(R.id.grid_view_movie);
         gridView.setAdapter(mImageMovieAdapter);
@@ -153,16 +204,18 @@ public class MainActivityFragment extends Fragment {
             }
         });
 
+
+
         return rootView;
     }
 
-    private void updateRecommendation() {
+    public void updateRecommendation() {
         //FetchMovieTask movieTask = new FetchMovieTask();
         FetchMovieTask movieTask = new FetchMovieTask(getActivity(), mImageMovieAdapter, mMovieDataArray);
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
         String sortOption = prefs.getString(getString(R.string.pref_sorts_key),
                 getString(R.string.pref_sorts_default));
-
+        mFirst = true;
         //movieTask.execute(location);
         movieTask.execute(sortOption);
     }
@@ -170,27 +223,67 @@ public class MainActivityFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-        updateRecommendation();
+        Log.d(LOG_TAG, "onStart() here");
+        Log.d(LOG_TAG, mSortOption);
+        //updateRecommendation();
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        super.onSaveInstanceState(savedInstanceState);
+        Log.d(LOG_TAG, "onSaveInstanceState() here");
+        ArrayList<MovieDataPar> movieDetailDataPar = new ArrayList<MovieDataPar>();
+        for (int i = 0; i < mImageMovieAdapter.mSuckDickMovieDataArray.size(); ++i) {
+            MovieDataPar movieDetailPar = new MovieDataPar();
+            movieDetailPar.setAdult(mImageMovieAdapter.mSuckDickMovieDataArray.get(i).getAdult());
+            movieDetailPar.setBackdropPath(mImageMovieAdapter.mSuckDickMovieDataArray.get(i).getBackdropPath());
+            movieDetailPar.setMovieId(mImageMovieAdapter.mSuckDickMovieDataArray.get(i).getId());
+            movieDetailPar.setOriginalLanguage(mImageMovieAdapter.mSuckDickMovieDataArray.get(i).getOriginalLanguage());
+            movieDetailPar.setOriginalTitle(mImageMovieAdapter.mSuckDickMovieDataArray.get(i).getOriginalTitle());
+            movieDetailPar.setOverview(mImageMovieAdapter.mSuckDickMovieDataArray.get(i).getOverview());
+            movieDetailPar.setReleaseDate(mImageMovieAdapter.mSuckDickMovieDataArray.get(i).getReleaseDate());
+            movieDetailPar.setPosterPath(mImageMovieAdapter.mSuckDickMovieDataArray.get(i).getPosterPath());
+            movieDetailPar.setPopularity(mImageMovieAdapter.mSuckDickMovieDataArray.get(i).getPopularity());
+            movieDetailPar.setTitle(mImageMovieAdapter.mSuckDickMovieDataArray.get(i).getTitle());
+            movieDetailPar.setVideo(mImageMovieAdapter.mSuckDickMovieDataArray.get(i).getVideo());
+            movieDetailPar.setVoteAvg(mImageMovieAdapter.mSuckDickMovieDataArray.get(i).getVoteAvg());
+            movieDetailPar.setVoteCount(mImageMovieAdapter.mSuckDickMovieDataArray.get(i).getVoteCount());
+            movieDetailPar.setYouTube(mImageMovieAdapter.mSuckDickMovieDataArray.get(i).getYouTube());
+            movieDetailPar.setReview(mImageMovieAdapter.mSuckDickMovieDataArray.get(i).getReview());
+            movieDetailDataPar.add(i, movieDetailPar);
+        }
+
+        savedInstanceState.putParcelableArrayList("param", movieDetailDataPar);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        Log.d(LOG_TAG, "onResume() here");
+//        String location = Utility.getPreferredLocation( this );
+//        // update the location in our second pane using the fragment manager
+//        //if (location != null && !location.equals(mLocation)) {
+//        //ForecastFragment ff = (ForecastFragment)getSupportFragmentManager().findFragmentByTag(FORECASTFRAGMENT_TAG);
+//        if (location != null && !location.equals(mLocation)) {
+//            ForecastFragment ff = (ForecastFragment)getSupportFragmentManager().findFragmentById(R.id.fragment_forecast);
+//            if ( null != ff ) {
+//                ff.onLocationChanged();
+//            }
+//            mLocation = location;
+//        }
     }
 
     /*private class FetchMovieTask extends AsyncTask<String, Void, ArrayList<MovieData>> {
-
         private final String LOG_TAG = FetchMovieTask.class.getSimpleName();
-
         @Override
         protected ArrayList<MovieData> doInBackground(String... params) {
-
             if (params.length == 0){
                 return null;
             }
-
-
             HttpURLConnection urlConnection = null;
             BufferedReader reader = null;
-
             // Will contain the raw JSON response as a string.
             String movieJsonStr = null;
-
             // Sort by popularity in descending order
             //String sort_by = "popularity.desc";
             // Sort by popularity in ascending order
@@ -199,12 +292,10 @@ public class MainActivityFragment extends Fragment {
             //String sort_by = "vote_count.desc";
             // Sort by vote count in ascending order
             //String sort_by = "vote_count.asc";
-
             try{
                 final String SORT_BY_PARAM = "sort_by";
                 final String API_KEY_PARAM = "api_key";
                 final String API_KEY = "1f81622504d93fd944c771a94fefecfb";
-
                 // Construct the URL for the query
                 Uri.Builder builder = new Uri.Builder();
                 builder.scheme("http")
@@ -216,14 +307,11 @@ public class MainActivityFragment extends Fragment {
                         .appendQueryParameter(API_KEY_PARAM, API_KEY);
                 URL url = new URL(builder.build().toString());
                 Log.v(LOG_TAG, url.toString());
-
                 //URL url = new URL("http://api.themoviedb.org/3/discover/movie?sort_by=popularity.desc&api_key=1f81622504d93fd944c771a94fefecfb");
-
                 // Create the request and open the connection
                 urlConnection = (HttpURLConnection) url.openConnection();
                 urlConnection.setRequestMethod("GET");
                 urlConnection.connect();
-
                 // Read the input stream into a String
                 InputStream inputStream = urlConnection.getInputStream();
                 StringBuffer buffer = new StringBuffer();
@@ -231,7 +319,6 @@ public class MainActivityFragment extends Fragment {
                     return null;
                 }
                 reader = new BufferedReader(new InputStreamReader(inputStream));
-
                 String line;
                 while ((line = reader.readLine()) != null) {
                     // Since it's JSON, adding a newline isn't necessary (it won't affect parsing)
@@ -239,15 +326,12 @@ public class MainActivityFragment extends Fragment {
                     // buffer for debugging.
                     buffer.append(line + "\n");
                 }
-
                 if (buffer.length() == 0){
                     // Stream was empty. No point in parsing.
                     return null;
                 }
                 movieJsonStr = buffer.toString();
                 Log.v(LOG_TAG, movieJsonStr);
-
-
             }
             catch (IOException e){
                 Log.e(LOG_TAG, "Error ", e);
@@ -277,7 +361,6 @@ public class MainActivityFragment extends Fragment {
             }
             return null;
         }
-
         @Override
         protected void onPostExecute(ArrayList<MovieData> result) {
             if (result != null) {
@@ -289,17 +372,15 @@ public class MainActivityFragment extends Fragment {
                 mMovieDataArray = result;
             }
         }
-
         *//**
-         * Take the String representing the complete forecast in JSON Format and
-         * pull out the data we need to construct the Strings needed for the wireframes.
-         *
-         * Fortunately parsing is easy:  constructor takes the JSON string and converts it
-         * into an Object hierarchy for us.
-         *//*
+     * Take the String representing the complete forecast in JSON Format and
+     * pull out the data we need to construct the Strings needed for the wireframes.
+     *
+     * Fortunately parsing is easy:  constructor takes the JSON string and converts it
+     * into an Object hierarchy for us.
+     *//*
         private ArrayList<MovieData> getMovieDataFromJson(String movieJsonStr)
                 throws JSONException {
-
             // These are the names of the JSON objects that need to be extracted.
             final String OWM_RESULT = "results";
             final String OWM_ADULT = "adult";
@@ -316,18 +397,12 @@ public class MainActivityFragment extends Fragment {
             final String OWM_VIDEO = "video";
             final String OWM_VOTE_AVG = "vote_average";
             final String OWM_VOTE_COUNT = "vote_count";
-
             JSONObject movieJson = new JSONObject(movieJsonStr);
             JSONArray movieArray = movieJson.getJSONArray(OWM_RESULT);
-
             ArrayList<MovieData> movieDataArray = new ArrayList<MovieData>();
-
             for (int i = 0; i < movieArray.length(); ++i) {
                 JSONObject itemMovie = movieArray.getJSONObject(i);
-
-
                 MovieData movieData = new MovieData();
-
                 movieData.setAdult(itemMovie.getBoolean(OWM_ADULT));
                 movieData.setBackdropPath(itemMovie.getString(OWM_BACKDROP_PATH));
                 JSONArray tmp = itemMovie.getJSONArray(OWM_GENRE_IDS);
@@ -351,10 +426,8 @@ public class MainActivityFragment extends Fragment {
                 movieData.setVideo(itemMovie.getBoolean(OWM_VIDEO));
                 movieData.setVoteAvg(itemMovie.getDouble(OWM_VOTE_AVG));
                 movieData.setVoteCount(itemMovie.getInt(OWM_VOTE_COUNT));
-
                 movieDataArray.add(i, movieData);
                 movieDataArray.add(movieData);
-
                 Log.v(LOG_TAG, "Adult " + Boolean.toString(movieDataArray.get(i).getAdult()));
                 Log.v(LOG_TAG, "Backdrop path " + movieDataArray.get(i).getBackdropPath());
                 for (int j = 0; j < movieDataArray.get(i).getGenreIds().size(); ++j) {
@@ -372,10 +445,7 @@ public class MainActivityFragment extends Fragment {
                 Log.v(LOG_TAG, "Vote Avg " + Double.toString(movieDataArray.get(i).getVoteAvg()));
                 Log.v(LOG_TAG, "Vote Count " + Integer.toString(movieDataArray.get(i).getVoteCount()));
             }
-
-
             return movieDataArray;
         }
-
     }*/
 }
